@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1 · Will it fit? Sizing a model's weights</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="ai-infra">
+<main>
+
+<p class="eyebrow"><a href="../index.html">AI Infrastructure</a> · Lesson 1 · ~7 min</p>
+<h1>Will it fit?</h1>
+<p class="lede">Estimate how much GPU memory a model's weights need, in your head, in five seconds.</p>
+
+<p class="mission"><strong>Why this first.</strong> Whatever the company sells (an inference API, a GPU cloud, a training platform), the first question about a model is the same: <em>how much memory does it need, and on how many GPUs?</em> It decides cost, latency and architecture. Engineers at these startups do this arithmetic constantly, and interviewers expect it.</p>
+
+<h2>A model is a big file of numbers</h2>
+<p>An LLM is mostly its <strong>parameters</strong> (also called <strong>weights</strong>): billions of numbers learned during training. The "70B" in <em>Llama 3 70B</em> means 70 billion parameters. To serve the model, all of them must sit in the GPU's own memory, called <strong>HBM</strong><sup><a href="#s2">2</a></sup>, so they can be read for every token generated.</p>
+
+<p>Each parameter is stored at some <strong>precision</strong> (the number format, or <em>dtype</em>), and that sets how many bytes it takes:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Precision</th><th class="num">Bytes / param</th><th>Where you'll see it</th></tr></thead>
+<tbody>
+<tr><td><code>fp32</code></td><td class="num">4</td><td>Training maths; rarely for serving</td></tr>
+<tr><td><code>bf16</code></td><td class="num">2</td><td>The default for released models</td></tr>
+<tr><td><code>fp8</code> / <code>int8</code></td><td class="num">1</td><td>Quantized serving</td></tr>
+<tr><td><code>int4</code></td><td class="num">0.5</td><td>Aggressive quantization</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Storing a model at fewer bits than it was trained at is called <strong>quantization</strong>. It shrinks memory, sometimes at a small cost in quality.</p>
+
+<h2>The one formula</h2>
+<p class="formula">weight memory = parameters × bytes per parameter<br><br>
+billions of params × bytes = GB</p>
+
+<p>The shortcut works because a billion bytes is a gigabyte. So a 70B model in bf16 is 70 × 2 = <strong>140 GB</strong>; in int8, 70 GB; in int4, 35 GB. Those are exactly the figures in Google's <em>How to Scale Your Model</em><sup><a href="#s1">1</a></sup>.</p>
+
+<p>Now compare with the GPU. An NVIDIA <strong>H100</strong> has 80 GB of memory<sup><a href="#s3">3</a></sup>; an <strong>H200</strong> has 141 GB<sup><a href="#s4">4</a></sup>. So a 70B model in bf16 <em>does not fit on one H100</em>: you need to split it over several GPUs, quantize it, or both.</p>
+
+<h2>The catch: weights are not the whole bill</h2>
+<p>While generating, the model also keeps a <strong>KV cache</strong>: stored intermediate values for every token in every active conversation. It grows with context length and with the number of simultaneous users. For Llama 3 70B it is about 160 kB per token in int8, which is about 5.3 GB for one 32k-token conversation<sup><a href="#s1">1</a></sup>. So "the weights fit" means "it can run", not "it can serve many users". The memory left after the weights is your KV-cache budget. That's the next lesson.</p>
+
+<p class="aside">Real-world check: Llama 3.1 405B in fp8 is about 405 GB of weights. vLLM serves it on a single node of 8 H100s (640 GB), leaving the rest for KV cache<sup><a href="#s5">5</a></sup>.</p>
+
+<p class="aside">Pedantic aside: GPU specs use GB (10<sup>9</sup> bytes) loosely; tools often report GiB (2<sup>30</sup>). The 7% difference doesn't matter for estimates.</p>
+
+<h2>Practice: recall, don't reread</h2>
+<p>Answer from memory. Scroll back up only after you've committed to an answer.</p>
+
+<div class="quiz widget" data-quiz-id="0001">
+    <fieldset class="q" data-answer="2">
+        <legend>1. Llama 3 8B in bf16: the weights take about…</legend>
+        <div class="options"><button>4 GB</button><button>8 GB</button><button>16 GB</button><button>32 GB</button></div>
+        <p class="why" hidden>8 billion × 2 bytes = 16 GB. It fits easily on one H100.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>2. A 70B model in bf16 on one H100 (80 GB)…</legend>
+        <div class="options"><button>Does not fit</button><button>Fits but tight</button><button>Fits with room</button></div>
+        <p class="why" hidden>70 × 2 = 140 GB, well over 80 GB. You'd need at least two H100s, or a quantized version.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>3. The same 70B model quantized to int4. The weights take about…</legend>
+        <div class="options"><button>17.5 GB</button><button>35 GB</button><button>70 GB</button><button>140 GB</button></div>
+        <p class="why" hidden>int4 is half a byte per parameter: 70 × 0.5 = 35 GB. Now it fits on one H100 with room to spare.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="3">
+        <legend>4. Why leave GPU memory free beyond the weights?</legend>
+        <div class="options">
+            <button>The GPU needs room to cool</button>
+            <button>Weights double in size at runtime</button>
+            <button>The driver reserves half of memory</button>
+            <button>The KV cache grows with tokens</button>
+        </div>
+        <p class="why" hidden>Every token in every active conversation adds to the KV cache. Free memory = how many users and how much context you can serve.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>5. Which change halves the weight memory?</legend>
+        <div class="options">
+            <button>Add a second GPU</button>
+            <button>Switch bf16 to fp8</button>
+            <button>Halve the context length</button>
+            <button>Use a faster GPU</button>
+        </div>
+        <p class="why" hidden>2 bytes → 1 byte per parameter. A second GPU splits the weights across two devices but the total stays the same; context length affects the KV cache, not the weights.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="2">
+        <legend>6. Llama 3.1 405B in fp8. The fewest H100s that can hold just the weights?</legend>
+        <div class="options"><button>4 GPUs</button><button>5 GPUs</button><button>6 GPUs</button><button>8 GPUs</button></div>
+        <p class="why" hidden>405 GB ÷ 80 GB = 5.06, so 6. In practice it runs on a full 8-GPU node: servers come in 8s, and the spare memory goes to the KV cache.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<p>Then build speed. Do five of these. Aim to answer each in under ten seconds.</p>
+
+<div class="sizing-drill widget" data-drill-id="weights"></div>
+
+<div class="next">
+    <p><strong>Your win:</strong> for any model, you can now say how much memory its weights need, and whether they fit on an H100 or H200.</p>
+    <p><strong>Cheat sheet:</strong> <a href="../reference/gpu-sizing.html">GPU sizing</a> · <strong>Terms:</strong> <a href="../reference/glossary.html">Glossary</a></p>
+    <p><strong>Read next (primary source):</strong> <a href="https://jax-ml.github.io/scaling-book/inference#what-about-memory">"What about memory?"</a> in <em>How to Scale Your Model</em>, ch. 7. Read just that section; it's written for TPUs, but the arithmetic is the same on GPUs.</p>
+    <p><strong>Stuck or curious?</strong> Ask your teacher (Claude) anything: "why bf16 and not fp16?", "what does quantization cost?". Tell me how the quiz went, too; I can't see your score.</p>
+</div>
+
+<hr>
+<h2>Sources</h2>
+<ol class="sources">
+    <li id="s1">Austin et al., <a href="https://jax-ml.github.io/scaling-book/applied-inference">"Serving LLaMA 3-70B on TPUs"</a> and <a href="https://jax-ml.github.io/scaling-book/inference">"All About Transformer Inference"</a>, <em>How to Scale Your Model</em>, Google DeepMind. Weight table (140 / 70 / 35 GB) and KV cache figures.</li>
+    <li id="s2">Modal, <a href="https://modal.com/gpu-glossary/readme"><em>GPU Glossary</em></a>. GPU memory and HBM.</li>
+    <li id="s3">NVIDIA, <a href="https://www.nvidia.com/en-us/data-center/h100/">H100 Tensor Core GPU</a>. 80 GB (SXM).</li>
+    <li id="s4">NVIDIA, <a href="https://www.nvidia.com/en-us/data-center/h200/">H200 GPU</a>. 141 GB HBM3e, 4.8 TB/s.</li>
+    <li id="s5">vLLM team, <a href="https://vllm.ai/blog/llama31">"Announcing Llama 3.1 Support in vLLM"</a>. 405B fp8 on 8×H100.</li>
+</ol>
+
+</main>
+<script src="../assets/quiz.js"></script>
+<script src="../assets/sizing-drill.js"></script>
+</body>
+</html>
