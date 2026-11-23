@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPU sizing cheat sheet</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="ai-infra">
+<main>
+<p class="eyebrow"><a href="../index.html">AI Infrastructure</a> · Reference</p>
+<h1>GPU sizing</h1>
+<p class="lede">Back-of-envelope memory maths for serving LLMs.</p>
+
+<h2>Weights</h2>
+<p class="formula">weight GB ≈ params (billions) × bytes per param</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Precision</th><th class="num">Bytes</th><th class="num">8B</th><th class="num">70B</th><th class="num">405B</th></tr></thead>
+<tbody>
+<tr><td><code>fp32</code></td><td class="num">4</td><td class="num">32 GB</td><td class="num">280 GB</td><td class="num">1620 GB</td></tr>
+<tr><td><code>bf16</code></td><td class="num">2</td><td class="num">16 GB</td><td class="num">140 GB</td><td class="num">810 GB</td></tr>
+<tr><td><code>fp8</code> / <code>int8</code></td><td class="num">1</td><td class="num">8 GB</td><td class="num">70 GB</td><td class="num">405 GB</td></tr>
+<tr><td><code>int4</code></td><td class="num">0.5</td><td class="num">4 GB</td><td class="num">35 GB</td><td class="num">203 GB</td></tr>
+</tbody></table></div>
+
+<h2>GPUs</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>GPU</th><th class="num">Memory</th><th class="num">Bandwidth</th><th class="num">8-GPU node</th></tr></thead>
+<tbody>
+<tr><td>H100 SXM</td><td class="num">80 GB</td><td class="num">3.35 TB/s</td><td class="num">640 GB</td></tr>
+<tr><td>H200</td><td class="num">141 GB</td><td class="num">4.8 TB/s</td><td class="num">1128 GB</td></tr>
+</tbody></table></div>
+
+<h2>Does it fit?</h2>
+<ol>
+<li>Weights = params × bytes.</li>
+<li>Minimum GPUs = ⌈weights ÷ GPU memory⌉. In practice round up to 2, 4 or 8.</li>
+<li>Whatever is left over is the <strong>KV cache</strong> budget: it sets how many users and how much context you can serve. Llama 3 70B: ~160 kB per token in int8, ~5.3 GB per 32k-token sequence.</li>
+</ol>
+
+<h2>Sources</h2>
+<ul class="sources">
+<li><a href="https://jax-ml.github.io/scaling-book/applied-inference"><em>How to Scale Your Model</em>, ch. 8</a> — weight and KV cache figures.</li>
+<li>NVIDIA <a href="https://www.nvidia.com/en-us/data-center/h100/">H100</a> and <a href="https://www.nvidia.com/en-us/data-center/h200/">H200</a> spec pages.</li>
+<li>Learned in <a href="../lessons/0001-will-it-fit.html">Lesson 1: Will it fit?</a></li>
+</ul>
+</main>
+</body>
+</html>

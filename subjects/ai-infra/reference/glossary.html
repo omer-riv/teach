@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="ai-infra">
+<main>
+<p class="eyebrow"><a href="../index.html">AI Infrastructure</a> · Reference</p>
+<h1>Glossary</h1>
+<p class="lede">The terms this course uses, and exactly what they mean here. Grows with each lesson.</p>
+
+<dl class="terms">
+<dt>Parameters (weights)</dt>
+<dd>The learned numbers that make up a model. "70B" = 70 billion parameters. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
+
+<dt>Precision (dtype)</dt>
+<dd>The number format each parameter is stored in, which fixes its size: fp32 = 4 bytes, bf16 = 2, fp8/int8 = 1, int4 = 0.5. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
+
+<dt>bf16 (bfloat16)</dt>
+<dd>16-bit floating-point format; the usual precision for released model weights. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
+
+<dt>Quantization</dt>
+<dd>Storing a model at lower precision than it was trained at (e.g. bf16 → int4) to save memory and bandwidth, sometimes at a small quality cost. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
+
+<dt>HBM (GPU memory)</dt>
+<dd>High-bandwidth memory on the GPU package. Weights and KV cache must live here while serving. H100: 80 GB; H200: 141 GB. <a href="https://modal.com/gpu-glossary/readme">Modal glossary</a></dd>
+
+<dt>Inference (serving)</dt>
+<dd>Running a trained model to produce outputs for users, as opposed to training it.</dd>
+
+<dt>Token</dt>
+<dd>The unit of text a model reads and writes, roughly a word piece.</dd>
+
+<dt>KV cache</dt>
+<dd>Stored intermediate values (keys and values) for every token in every active sequence, kept so the model doesn't recompute them. Grows with context length × concurrent users. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
+
+<dt>Node</dt>
+<dd>One server, typically holding 8 GPUs connected by fast links.</dd>
+</dl>
+</main>
+</body>
+</html>
