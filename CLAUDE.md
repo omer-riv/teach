@@ -1,7 +1,7 @@
 # teach
 
 Self-study courses, one per subject, built with the `/teach` skill and published at
-**https://learn.smalldetour.app**. The user works from Claude Code on their phone: they
+**https://teach.smalldetour.app**. The user works from Claude Code on their phone: they
 prompt, the change lands on `main`, and Cloudflare deploys it. Nobody runs anything on a
 computer, so every step below must work from a cloud session.
 
@@ -50,5 +50,5 @@ wrangler.jsonc            Cloudflare Worker that serves dist/ as static files
 3. Merge it into `main` if you are able to; otherwise give the user the pull request link to
    merge from the GitHub app. Cloudflare deploys `main` about a minute after the merge.
 4. End with the lesson's address:
-   `https://learn.smalldetour.app/<slug>/lessons/<file-without-.html>`.
+   `https://teach.smalldetour.app/<slug>/lessons/<file-without-.html>`.
    Before the merge, Cloudflare comments a preview link on the pull request.

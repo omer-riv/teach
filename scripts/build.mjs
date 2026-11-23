@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds dist/, the static site Cloudflare serves at learn.smalldetour.app.
+// Builds dist/, the static site Cloudflare serves at teach.smalldetour.app.
 //
 //   node scripts/build.mjs
 //

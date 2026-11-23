@@ -1,4 +1,4 @@
-// Cloudflare Worker that serves dist/ (built by scripts/build.mjs) at learn.smalldetour.app.
+// Cloudflare Worker that serves dist/ (built by scripts/build.mjs) at teach.smalldetour.app.
 // Cloudflare's Git integration runs `npx wrangler deploy` on every push to main; wrangler runs
 // the build command first. Pushes to other branches get a preview URL instead.
 {
@@ -16,7 +16,7 @@
     },
     // Creates the DNS record and certificate on deploy; smalldetour.app is already on this account.
     "routes": [
-        { "pattern": "learn.smalldetour.app", "custom_domain": true }
+        { "pattern": "teach.smalldetour.app", "custom_domain": true }
     ],
     "workers_dev": true,
     "preview_urls": true

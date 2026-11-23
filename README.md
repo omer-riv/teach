@@ -1,6 +1,6 @@
 # teach
 
-Self-study courses made with the `/teach` skill, published at https://learn.smalldetour.app.
+Self-study courses made with the `/teach` skill, published at https://teach.smalldetour.app.
 See `CLAUDE.md` for how the repo works.
 
 ## Use it (from the phone)
@@ -16,9 +16,9 @@ the site updates about a minute later.
 2. **Cloudflare:** Workers & Pages → Create → Import a repository → this repo.
    Keep the defaults (build command empty, deploy command `npx wrangler deploy`), and turn on
    builds for non-production branches so pull requests get a preview link.
-   The first deploy of `main` creates `learn.smalldetour.app` from `wrangler.jsonc`.
+   The first deploy of `main` creates `teach.smalldetour.app` from `wrangler.jsonc`.
 3. Optional: to keep the site private, add a Cloudflare Access application for
-   `learn.smalldetour.app` with an email one-time PIN policy.
+   `teach.smalldetour.app` with an email one-time PIN policy.
 
 ## Local commands
 
