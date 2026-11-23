@@ -1,0 +1,23 @@
+// Cloudflare Worker that serves dist/ (built by scripts/build.mjs) at learn.smalldetour.app.
+// Cloudflare's Git integration runs `npx wrangler deploy` on every push to main; wrangler runs
+// the build command first. Pushes to other branches get a preview URL instead.
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "teach",
+    "compatibility_date": "2026-11-20",
+    "build": {
+        "command": "node scripts/build.mjs"
+    },
+    "assets": {
+        "directory": "./dist",
+        // "/rust/lessons/0001-x" serves 0001-x.html, so lesson links don't need the extension.
+        "html_handling": "auto-trailing-slash",
+        "not_found_handling": "404-page"
+    },
+    // Creates the DNS record and certificate on deploy; smalldetour.app is already on this account.
+    "routes": [
+        { "pattern": "learn.smalldetour.app", "custom_domain": true }
+    ],
+    "workers_dev": true,
+    "preview_urls": true
+}
