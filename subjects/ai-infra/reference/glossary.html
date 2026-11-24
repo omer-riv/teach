@@ -25,8 +25,11 @@
 <dt>Quantization</dt>
 <dd>Storing a model at lower precision than it was trained at (e.g. bf16 → int4) to save memory and bandwidth, sometimes at a small quality cost. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
 
-<dt>HBM (GPU memory)</dt>
-<dd>High-bandwidth memory on the GPU package. Weights and KV cache must live here while serving. H100: 80 GB; H200: 141 GB. <a href="https://modal.com/gpu-glossary/readme">Modal glossary</a></dd>
+<dt>Host and device</dt>
+<dd>The <strong>host</strong> is the CPU and its RAM; the <strong>device</strong> is the GPU and its own separate memory. They are connected by PCIe, which is far slower than the GPU's own memory, so data is copied to the device once and kept there.</dd>
+
+<dt>HBM (GPU memory, GPU RAM)</dt>
+<dd>The GPU's own memory: high-bandwidth stacks next to the GPU chip on the same package, not on the chip itself and not shared with the CPU. Weights and KV cache must live here while serving. H100: 80 GB at 3.35 TB/s; H200: 141 GB at 4.8 TB/s. <a href="https://modal.com/gpu-glossary/device-hardware/gpu-ram">Modal glossary</a></dd>
 
 <dt>Inference (serving)</dt>
 <dd>Running a trained model to produce outputs for users, as opposed to training it.</dd>

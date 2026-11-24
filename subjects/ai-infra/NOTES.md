@@ -18,3 +18,4 @@ Interleave sizing questions from earlier lessons into later drills (spacing).
 
 ## Session log
 - 2026-11-23: Mission interview done. Lesson 0001 published. Ask how it went next session.
+- 2026-11-24: Asked why a GPU has its own memory (expected one shared memory). Explained host/device, HBM, PCIe. See LR 0002. Open lesson 2 with a quick retrieval check on this.
