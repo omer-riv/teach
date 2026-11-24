@@ -31,6 +31,19 @@
 <tr><td>H200</td><td class="num">141 GB</td><td class="num">4.8 TB/s</td><td class="num">1128 GB</td></tr>
 </tbody></table></div>
 
+<h2>KV cache</h2>
+<p class="formula">KV per token = 2 × layers × KV heads × head dim × bytes<br><br>
+per conversation = KV per token × tokens<br>
+(kB per token × thousands of tokens = MB)<br><br>
+conversations at once ≤ free memory ÷ per conversation</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Llama 3.1, bf16</th><th class="num">Layers</th><th class="num">KV heads</th><th class="num">Head dim</th><th class="num">Per token</th><th class="num">8k conv.</th><th class="num">32k conv.</th></tr></thead>
+<tbody>
+<tr><td>8B</td><td class="num">32</td><td class="num">8</td><td class="num">128</td><td class="num">~130 kB</td><td class="num">~1 GB</td><td class="num">~4 GB</td></tr>
+<tr><td>70B</td><td class="num">80</td><td class="num">8</td><td class="num">128</td><td class="num">~330 kB</td><td class="num">~2.7 GB</td><td class="num">~11 GB</td></tr>
+</tbody></table></div>
+<p>Halve these for fp8/int8 KV. Real capacity is lower than the estimate (working memory); budget roughly half.</p>
+
 <h2>Does it fit?</h2>
 <ol>
 <li>Weights = params × bytes.</li>
@@ -41,8 +54,9 @@
 <h2>Sources</h2>
 <ul class="sources">
 <li><a href="https://jax-ml.github.io/scaling-book/applied-inference"><em>How to Scale Your Model</em>, ch. 8</a> — weight and KV cache figures.</li>
+<li>Llama 3.1 <a href="https://huggingface.co/unsloth/Meta-Llama-3.1-8B/raw/main/config.json">8B</a> and <a href="https://huggingface.co/unsloth/Meta-Llama-3.1-70B/raw/main/config.json">70B</a> configs (ungated mirrors).</li>
 <li>NVIDIA <a href="https://www.nvidia.com/en-us/data-center/h100/">H100</a> and <a href="https://www.nvidia.com/en-us/data-center/h200/">H200</a> spec pages.</li>
-<li>Learned in <a href="../lessons/0001-will-it-fit.html">Lesson 1: Will it fit?</a></li>
+<li>Learned in <a href="../lessons/0001-will-it-fit.html">Lesson 1: Will it fit?</a> and <a href="../lessons/0002-the-kv-cache.html">Lesson 2: The KV cache</a></li>
 </ul>
 </main>
 </body>
