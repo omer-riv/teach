@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2 · The KV cache: memory that grows with every token</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="ai-infra">
+<main>
+
+<p class="eyebrow"><a href="../index.html">AI Infrastructure</a> · Lesson 2 · ~8 min</p>
+<h1>The KV cache</h1>
+<p class="lede">Work out how many conversations a GPU can serve at once, and how long they can be.</p>
+
+<p class="mission"><strong>Why this matters.</strong> In <a href="0001-will-it-fit.html">lesson 1</a> the weights decided whether a model can <em>run</em>. The KV cache decides how many users it can <em>serve</em>, which is what an inference company actually sells. Most serving-engine features (vLLM's PagedAttention, prefix caching, KV offloading) exist to manage this one block of memory.</p>
+
+<h2>Warm-up: from last time</h2>
+<div class="quiz widget" data-quiz-id="0002-warmup">
+    <fieldset class="q" data-answer="3">
+        <legend>A 32B model in fp8: the weights take about…</legend>
+        <div class="options"><button>8 GB</button><button>64 GB</button><button>16 GB</button><button>32 GB</button></div>
+        <p class="why" hidden>32 billion × 1 byte = 32 GB.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>Why must the weights live in GPU memory rather than CPU RAM?</legend>
+        <div class="options">
+            <button>CPU RAM is too small</button>
+            <button>Every token rereads all weights</button>
+            <button>The CPU cannot hold floats</button>
+            <button>PCIe only works at startup</button>
+        </div>
+        <p class="why" hidden>Each new token reads essentially every weight. GPU memory delivers 3.35 TB/s on an H100; PCIe from CPU RAM is roughly 50× slower, so the GPU would mostly wait.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<h2>What the cache is</h2>
+<p>An LLM writes one token at a time. To choose the next token, a step called <strong>attention</strong> looks back at every earlier token in the conversation. In each layer, every earlier token gets turned into two lists of numbers: a <strong>key</strong> and a <strong>value</strong>.</p>
+<p>For a token that's already been processed, its keys and values never change. So instead of recomputing them for the whole conversation on every step, the engine computes them once and stores them: the <strong>KV cache</strong>. As an engineer you know this pattern: it's memoization. It trades memory for compute, and the memory grows by one entry per token, per conversation.</p>
+
+<h2>How big it is</h2>
+<p class="formula">KV per token = 2 × layers × KV heads × head dim × bytes</p>
+<p>The 2 is for keys plus values. The other numbers come from the model's <code>config.json</code>. This is the formula from <em>How to Scale Your Model</em><sup><a href="#s1">1</a></sup>:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Llama 3.1, bf16</th><th class="num">Layers</th><th class="num">KV heads</th><th class="num">Head dim</th><th class="num">Per token</th></tr></thead>
+<tbody>
+<tr><td>8B<sup><a href="#s2">2</a></sup></td><td class="num">32</td><td class="num">8</td><td class="num">128</td><td class="num">~130 kB</td></tr>
+<tr><td>70B<sup><a href="#s3">3</a></sup></td><td class="num">80</td><td class="num">8</td><td class="num">128</td><td class="num">~330 kB</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Then multiply out. The shortcut: <strong>kB per token × thousands of tokens = MB</strong>.</p>
+<p class="formula">per conversation = KV per token × tokens<br><br>
+conversations at once = free memory ÷ per conversation</p>
+
+<h3>Worked example</h3>
+<p>Llama 3.1 8B in bf16 on one H100 (80 GB):</p>
+<ol>
+<li>Weights: 8 × 2 = 16 GB. Free: about 64 GB.</li>
+<li>One 8,000-token conversation: 130 kB × 8k = 1,040 MB ≈ <strong>1 GB</strong>.</li>
+<li>Conversations at once: 64 ÷ 1 ≈ <strong>64</strong>.</li>
+</ol>
+<p>Now let each conversation be 32k tokens: 4 GB each, so only 16 at once. <strong>Context length and number of users trade off directly.</strong> That's the core sizing tension in LLM serving.</p>
+
+<p class="aside">Treat these as upper bounds. Engines also need working memory for the computation itself, so real capacity is lower; <em>How to Scale Your Model</em> suggests real numbers are often around half the clean estimate<sup><a href="#s1">1</a></sup>.</p>
+
+<h2>Why "KV heads" is in the formula</h2>
+<p>Llama 3 70B has 64 attention heads but only 8 <em>KV</em> heads<sup><a href="#s3">3</a></sup>: groups of heads share one set of keys and values. This is called <strong>grouped-query attention (GQA)</strong>, and it shrinks the KV cache "by a factor of the Q:KV ratio"<sup><a href="#s1">1</a></sup>, here 8×. Without it, one 32k-token conversation on the 70B model would need about 86 GB, more than a whole H100. Model architecture choices are infrastructure choices.</p>
+
+<p class="aside">A preview of lesson 4: the vLLM team found that serving systems before vLLM wasted 60–80% of this memory through fragmentation and over-reservation<sup><a href="#s4">4</a></sup>. Fixing that is how vLLM got its name.</p>
+
+<h2>Practice</h2>
+<div class="quiz widget" data-quiz-id="0002">
+    <fieldset class="q" data-answer="2">
+        <legend>1. What does the KV cache store?</legend>
+        <div class="options">
+            <button>The finished replies for reuse</button>
+            <button>A copy of the weights</button>
+            <button>Keys and values per token</button>
+            <button>Each user's login session data</button>
+        </div>
+        <p class="why" hidden>The attention keys and values of every token so far, per layer, so they aren't recomputed at each step.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>2. Llama 3.1 8B uses ~130 kB per token. One 8,000-token conversation needs about…</legend>
+        <div class="options"><button>0.1 GB</button><button>1 GB</button><button>10 GB</button><button>100 GB</button></div>
+        <p class="why" hidden>130 kB × 8k = 1,040 MB ≈ 1 GB.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>3. Every conversation doubles in length. The number you can serve at once…</legend>
+        <div class="options"><button>Halves</button><button>Doubles</button><button>Stays same</button><button>Quarters</button></div>
+        <p class="why" hidden>Each conversation's cache doubles, so the same free memory holds half as many.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="3">
+        <legend>4. Which does <em>not</em> change the KV cache per token?</legend>
+        <div class="options"><button>Layer count</button><button>KV heads</button><button>Precision bytes</button><button>User count</button></div>
+        <p class="why" hidden>More users means more tokens in total, but each token's cache size is fixed by layers, KV heads, head dim and precision.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="2">
+        <legend>5. A 70B model in fp8 on two H100s (160 GB). Its KV cache is ~5.3 GB per 32k-token conversation. How many of those fit at once?</legend>
+        <div class="options"><button>About 4</button><button>About 50</button><button>About 17</button><button>About 170</button></div>
+        <p class="why" hidden>Weights 70 × 1 = 70 GB, leaving ~90 GB. 90 ÷ 5.3 ≈ 17, as an upper bound.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<p>Then the mixed drill. It also asks lesson 1 questions; switching between problem types is deliberate, because it makes the skill stick.</p>
+<div class="sizing-drill widget" data-drill-id="mixed" data-modes="weights,kv,capacity"></div>
+
+<div class="next">
+    <p><strong>Your win:</strong> given a model and a GPU, you can estimate how many conversations of a given length it can serve at once.</p>
+    <p><strong>Cheat sheet:</strong> <a href="../reference/gpu-sizing.html">GPU sizing</a> (now with the KV cache) · <strong>Terms:</strong> <a href="../reference/glossary.html">Glossary</a></p>
+    <p><strong>Read next (primary source):</strong> the vLLM team's launch post, <a href="https://vllm.ai/blog/2023-06-20-vllm">"vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention"</a>. It's short and readable on a phone. Read up to the diagrams of PagedAttention.</p>
+    <p><strong>Questions?</strong> Ask your teacher (Claude): "what exactly is an attention head?", "why does the cache need every earlier token?". And tell me how the quiz and drill went.</p>
+</div>
+
+<hr>
+<h2>Sources</h2>
+<ol class="sources">
+    <li id="s1">Austin et al., <a href="https://jax-ml.github.io/scaling-book/inference">"All About Transformer Inference"</a> and <a href="https://jax-ml.github.io/scaling-book/applied-inference">"Serving LLaMA 3-70B on TPUs"</a>, <em>How to Scale Your Model</em>. KV cache formula, GQA, the ~½ real-world factor, 70B fp8 figures.</li>
+    <li id="s2">Llama 3.1 8B <a href="https://huggingface.co/unsloth/Meta-Llama-3.1-8B/raw/main/config.json"><code>config.json</code></a> (ungated mirror of Meta's release).</li>
+    <li id="s3">Llama 3.1 70B <a href="https://huggingface.co/unsloth/Meta-Llama-3.1-70B/raw/main/config.json"><code>config.json</code></a> (ungated mirror). Head dim = 8192 ÷ 64 = 128.</li>
+    <li id="s4">Kwon et al., <a href="https://vllm.ai/blog/2023-06-20-vllm">"vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention"</a>, 2023.</li>
+</ol>
+
+</main>
+<script src="../assets/quiz.js"></script>
+<script src="../assets/sizing-drill.js"></script>
+</body>
+</html>

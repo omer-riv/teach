@@ -38,7 +38,16 @@
 <dd>The unit of text a model reads and writes, roughly a word piece.</dd>
 
 <dt>KV cache</dt>
-<dd>Stored intermediate values (keys and values) for every token in every active sequence, kept so the model doesn't recompute them. Grows with context length × concurrent users. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
+<dd>The attention keys and values of every token so far, per layer, stored so they aren't recomputed at each step (memoization). Per token = 2 × layers × KV heads × head dim × bytes. Total grows with context length × concurrent conversations. <a href="../lessons/0002-the-kv-cache.html">L2</a></dd>
+
+<dt>Attention</dt>
+<dd>The step in each layer where the model looks back at all earlier tokens to decide the next one. It's why every earlier token's keys and values are needed. <a href="../lessons/0002-the-kv-cache.html">L2</a></dd>
+
+<dt>Grouped-query attention (GQA)</dt>
+<dd>Several attention heads share one set of keys and values, so the model has fewer <em>KV heads</em> than attention heads. Shrinks the KV cache by that ratio (Llama 3 70B: 64 heads, 8 KV heads → 8×). <a href="../lessons/0002-the-kv-cache.html">L2</a></dd>
+
+<dt>Context length</dt>
+<dd>How many tokens a conversation holds (prompt plus output so far). Longer context = bigger KV cache = fewer conversations at once. <a href="../lessons/0002-the-kv-cache.html">L2</a></dd>
 
 <dt>Node</dt>
 <dd>One server, typically holding 8 GPUs connected by fast links.</dd>
