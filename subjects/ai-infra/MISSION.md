@@ -1,21 +1,20 @@
-# Mission: AI Infrastructure
+# Mission: Training AI Models
 
 ## Why
-Switch careers into a software engineering role at an AI infrastructure startup. A strong software engineer already, with little ML background, who wants to reason about LLM systems the way the people building them do.
+Understand how AI models are trained, the different ways to do it and the decisions involved, and be able to run training yourself. Infrastructure knowledge supports this. The career target is open: an engineering role at an AI infra startup, or something closer to ML.
 
 ## Success looks like
-- Size a model to hardware on the spot: how much GPU memory a model needs, and how many GPUs, at a given precision and context length
-- Explain what happens to an LLM request end to end in a serving engine (prefill, decode, KV cache, batching) and where the bottlenecks are
-- Explain how a model is trained across many GPUs (data, tensor and pipeline parallelism) at the level of a system design discussion
-- Describe the LLM app tooling layer (evals, observability, RAG, agents) and what problems its companies sell solutions to
-- Read an AI infra job post or engineering blog and understand every term in it
-- Hold up in a system design interview on LLM serving or GPU clusters
+- Explain end to end how a model learns: the training loop, loss, gradients, learning rate
+- Know the main ways to train (pretraining, fine-tuning, LoRA, post-training such as RLHF/DPO) and when each fits
+- Make the key decisions: data, model size, compute budget, hyperparameters, and how to tell whether it worked
+- Train a small model from scratch, and fine-tune an open model, yourself
+- Estimate what a training run needs in GPUs, memory and cost
 
 ## Constraints
-- Studies 5–10 minutes at a time, on a phone: short lessons, quizzes, no laptop-only exercises
-- Exploring a switch, no fixed date; building toward a move within about a year
-- No target companies yet
+- Mostly 5–10 minute lessons on a phone; an occasional laptop session in a free Colab notebook
+- Light maths: concepts with small worked numbers, no derivations
+- Strong software engineer; little ML background
 
 ## Out of scope
-- ML math derivations (backprop, linear algebra proofs): systems-level intuition only
-- Training models from scratch or ML research
+- ML research and maths derivations
+- Deep GPU kernel programming (infra stays at the level that supports training decisions)

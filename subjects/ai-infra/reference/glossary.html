@@ -8,13 +8,37 @@
 </head>
 <body data-subject="ai-infra">
 <main>
-<p class="eyebrow"><a href="../index.html">AI Infrastructure</a> · Reference</p>
+<p class="eyebrow"><a href="../index.html">Training AI Models</a> · Reference</p>
 <h1>Glossary</h1>
 <p class="lede">The terms this course uses, and exactly what they mean here. Grows with each lesson.</p>
 
 <dl class="terms">
+<dt>Training</dt>
+<dd>Finding the parameter values that make a model's predictions match real examples, by repeatedly measuring the loss and nudging the parameters to lower it. <a href="../lessons/0003-a-function-with-knobs.html">L3</a></dd>
+
+<dt>Loss</dt>
+<dd>One number for how wrong the model's predictions are on training examples. Lower is better. Mean squared error = average of (prediction − actual)². <a href="../lessons/0003-a-function-with-knobs.html">L3</a></dd>
+
+<dt>Gradient</dt>
+<dd>For each parameter: how the loss changes if that parameter is nudged up. Its sign gives the direction, its size the steepness. <a href="../lessons/0003-a-function-with-knobs.html">L3</a></dd>
+
+<dt>Gradient descent</dt>
+<dd>Repeat <code>w ← w − learning rate × gradient</code> for every parameter until the loss stops falling. <a href="../lessons/0003-a-function-with-knobs.html">L3</a></dd>
+
+<dt>Learning rate</dt>
+<dd>How big each gradient-descent step is. Too small: slow. Too big: overshoots and diverges. <a href="../lessons/0003-a-function-with-knobs.html">L3</a></dd>
+
+<dt>Hyperparameter</dt>
+<dd>A setting you choose before training rather than one the model learns, e.g. the learning rate. <a href="../lessons/0003-a-function-with-knobs.html">L3</a></dd>
+
+<dt>Backpropagation</dt>
+<dd>The algorithm that computes the gradient for every parameter in one backward pass through the model. Lesson 4.</dd>
+
+<dt>Converge / diverge</dt>
+<dd>A run converges when the loss settles near its minimum; it diverges when the loss grows without bound. <a href="../lessons/0003-a-function-with-knobs.html">L3</a></dd>
+
 <dt>Parameters (weights)</dt>
-<dd>The learned numbers that make up a model. "70B" = 70 billion parameters. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
+<dd>The learned numbers ("knobs") that make up a model, adjusted during training. "70B" = 70 billion parameters. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
 
 <dt>Precision (dtype)</dt>
 <dd>The number format each parameter is stored in, which fixes its size: fp32 = 4 bytes, bf16 = 2, fp8/int8 = 1, int4 = 0.5. <a href="../lessons/0001-will-it-fit.html">L1</a></dd>
