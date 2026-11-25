@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 · A model is a function with knobs</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="ai-infra">
+<main>
+
+<p class="eyebrow"><a href="../index.html">Training AI Models</a> · Lesson 3 · Part A · ~9 min</p>
+<h1>A function with knobs</h1>
+<p class="lede">Train a model by hand, then let gradient descent do it, and see what the learning rate does.</p>
+
+<p class="mission"><strong>Why this first.</strong> Every way of training you'll meet, from pretraining to LoRA to RLHF, is this same loop at a bigger scale: measure how wrong the model is, then nudge its knobs to be less wrong. Get the small version into your hands and the big versions become variations on it.</p>
+
+<h2>Warm-up: from last time</h2>
+<div class="quiz widget" data-quiz-id="0003-warmup">
+    <fieldset class="q" data-answer="2">
+        <legend>Every conversation doubles in length. The number a GPU can serve at once…</legend>
+        <div class="options"><button>Doubles</button><button>Stays same</button><button>Halves</button><button>Quarters</button></div>
+        <p class="why" hidden>Each conversation's KV cache doubles, so the same free memory holds half as many.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>A 70B model in bf16: the weights take about…</legend>
+        <div class="options"><button>140 GB</button><button>70 GB</button><button>35 GB</button><button>280 GB</button></div>
+        <p class="why" hidden>70 billion × 2 bytes = 140 GB. Hold on to that "70 billion": it's about to mean something new.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<h2>A model is a function with knobs</h2>
+<p>Say you want to predict taxi fares from distance. A simple model:</p>
+<p class="formula">fare = w × km</p>
+<p><code>w</code> is a <strong>knob</strong>: a number the model can adjust. A machine learning person would call it a <strong>parameter</strong> or <strong>weight</strong>, the same word as in <a href="0001-will-it-fit.html">lesson 1</a>. <strong>Training</strong> means finding the knob values that make the model's predictions match real examples.</p>
+<p>An LLM is the same idea: a function from text to "what comes next", with 70 billion knobs instead of one. Those are the 140 GB you sized in lesson 1.</p>
+
+<h2>Loss: one number for "how wrong"</h2>
+<p>To tune a knob you need a score. The <strong>loss</strong> is a single number measuring how wrong the predictions are on the training examples. Lower is better. A common one is <strong>mean squared error</strong>: for each example, take (prediction − actual)², then average<sup><a href="#s2">2</a></sup>.</p>
+<p>Below are five real-looking rides. Try to find the best <code>w</code> yourself.</p>
+
+<div class="descent-lab widget" data-lab-mode="slider"></div>
+
+<p>You just did training by hand. With one knob, dragging works. With 70 billion it doesn't, so we need the model to work out <em>which way</em> to turn each knob by itself.</p>
+
+<h2>The gradient: which way is downhill</h2>
+<p>The <strong>gradient</strong> says how the loss changes if you nudge the knob up a little. Its <strong>sign</strong> gives the direction: positive means turning <code>w</code> up makes the loss worse, so turn it down. Its <strong>size</strong> says how steep the slope is. Then take a step the other way<sup><a href="#s1">1</a></sup>:</p>
+<p class="formula">w ← w − learning rate × gradient</p>
+<p>Repeat until the loss stops falling. That's <strong>gradient descent</strong>, the core of how neural networks learn<sup><a href="#s1">1</a></sup>.</p>
+
+<h3>One step, with real numbers</h3>
+<ol>
+<li>Start at <code>w = 1</code>. The loss is 10.7: way off.</li>
+<li>The gradient is −21.7. It's negative, so turning <code>w</code> <em>up</em> lowers the loss.</li>
+<li>With a learning rate of 0.04: <code>w ← 1 − 0.04 × (−21.7) = 1.87</code>.</li>
+<li>The new loss is 0.17. One step got most of the way there.</li>
+</ol>
+
+<h2>The learning rate: how big a step</h2>
+<p>The <strong>learning rate</strong> scales each step. It isn't learned; you choose it. A value you set before training is called a <strong>hyperparameter</strong>. Google's crash course puts it plainly: every model and dataset has its own ideal learning rate<sup><a href="#s2">2</a></sup>. Try all three below, five steps each:</p>
+
+<div class="descent-lab widget" data-lab-mode="step"></div>
+
+<p>You should see three behaviours:</p>
+<ul>
+<li><strong>0.005: too small.</strong> Steady progress, but slow. On a big model that means wasted GPU-hours.</li>
+<li><strong>0.04: about right.</strong> Close to the best <code>w</code> in a couple of steps.</li>
+<li><strong>0.1: too big.</strong> Every step overshoots further than the last, and the loss explodes. The training run <em>diverges</em> and never converges<sup><a href="#s2">2</a></sup>.</li>
+</ul>
+<p class="aside">When you later see a real training run's loss suddenly spike or go to NaN, the learning rate is the first suspect. Part C covers this.</p>
+
+<h2>Scaling up: billions of knobs</h2>
+<p>A real model needs a gradient for <em>every</em> knob at every step. Computing those one at a time would be hopeless. <strong>Backpropagation</strong> computes all of them in a single backward pass through the model, for roughly twice the cost of running the model forward. That's lesson 4. The update rule stays the same as the one you just used.</p>
+
+<h2>Practice</h2>
+<div class="quiz widget" data-quiz-id="0003">
+    <fieldset class="q" data-answer="1">
+        <legend>1. What does the loss measure?</legend>
+        <div class="options">
+            <button>How fast the model runs</button>
+            <button>How wrong the predictions are</button>
+            <button>How many knobs it has</button>
+            <button>How much memory it needs</button>
+        </div>
+        <p class="why" hidden>One number for how far the predictions are from the real answers on the training examples. Training pushes it down.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>2. The gradient for <code>w</code> is positive. To lower the loss, <code>w</code> should…</legend>
+        <div class="options"><button>Decrease</button><button>Increase</button><button>Stay</button><button>Double</button></div>
+        <p class="why" hidden>Positive gradient: raising <code>w</code> raises the loss. So step the other way: <code>w − lr × gradient</code> makes <code>w</code> smaller.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="3">
+        <legend>3. The loss jumps higher every step and blows up. The most likely cause?</legend>
+        <div class="options">
+            <button>Learning rate too low</button>
+            <button>Too few model knobs</button>
+            <button>Too much training data</button>
+            <button>Learning rate too high</button>
+        </div>
+        <p class="why" hidden>Steps so big they overshoot the minimum, each further than the last. That's what 0.1 did in the lab.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="2">
+        <legend>4. Training an LLM means adjusting…</legend>
+        <div class="options">
+            <button>Its stored training data</button>
+            <button>Its GPU memory layout</button>
+            <button>Its billions of parameters</button>
+            <button>Its tokens per second</button>
+        </div>
+        <p class="why" hidden>The parameters are the knobs. A 70B model has 70 billion of them, all nudged by gradient descent.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>5. <code>w = 2</code>, gradient = 5, learning rate = 0.1. After one step, <code>w</code> is…</legend>
+        <div class="options"><button>2.5</button><button>1.5</button><button>0.5</button><button>1.9</button></div>
+        <p class="why" hidden>2 − 0.1 × 5 = 1.5.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<div class="next">
+    <p><strong>Your win:</strong> you trained a model twice, by hand and by gradient descent, and you can say what the learning rate does when it's too small or too big.</p>
+    <p><strong>Terms:</strong> <a href="../reference/glossary.html">Glossary</a> (loss, gradient, learning rate added) · <a href="../index.html">Curriculum</a></p>
+    <p><strong>Watch next (primary source):</strong> 3Blue1Brown, <a href="https://www.3blue1brown.com/lessons/gradient-descent">"Gradient descent, how neural networks learn"</a> (about 20 min). It's the same idea with a real neural network and beautiful visuals. It sets up backpropagation for lesson 4.</p>
+    <p><strong>Questions?</strong> Ask your teacher (Claude): "why squared error?", "what if there are many valleys?". Tell me how the quiz and the labs went, too.</p>
+</div>
+
+<hr>
+<h2>Sources</h2>
+<ol class="sources">
+    <li id="s1">3Blue1Brown, <a href="https://www.3blue1brown.com/lessons/gradient-descent">"Gradient descent, how neural networks learn"</a>, Deep Learning ch. 2.</li>
+    <li id="s2">Google, Machine Learning Crash Course: <a href="https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent">"Gradient descent"</a> and <a href="https://developers.google.com/machine-learning/crash-course/linear-regression/hyperparameters">"Hyperparameters"</a>. Loss, learning rate, convergence.</li>
+</ol>
+
+</main>
+<script src="../assets/quiz.js"></script>
+<script src="../assets/descent-lab.js"></script>
+</body>
+</html>

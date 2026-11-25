@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Training AI Models</title>
+<link rel="stylesheet" href="assets/course.css">
+</head>
+<body data-subject="ai-infra">
+<main>
+
+<p class="eyebrow"><a href="../">All subjects</a></p>
+<h1>Training AI Models</h1>
+<p class="lede">How models learn, the ways to train them, what to take into account, and doing it yourself, with the infrastructure alongside.</p>
+<p class="progress-summary">Lessons tick off here when you finish their quiz on this device.</p>
+
+<h2>Part A · How a model learns</h2>
+<ol class="curriculum">
+    <li class="available" data-quiz-ids="0003"><span class="mark"></span><span class="body">
+        <a href="lessons/0003-a-function-with-knobs.html">A function with knobs</a>
+        <span class="desc">Loss, gradient descent, learning rate. Train a model by hand.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">The training loop</span>
+        <span class="desc">Forward pass, loss, backpropagation, update step. Batches and epochs.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">How an LLM learns language</span>
+        <span class="desc">Next-token prediction, tokens, what the training data looks like.</span></span></li>
+</ol>
+
+<h2>Part B · The ways to train</h2>
+<ol class="curriculum">
+    <li><span class="mark"></span><span class="body"><span class="title">The life of a model</span>
+        <span class="desc">Pretraining, then post-training, then fine-tuning, and what each costs.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Pretraining</span>
+        <span class="desc">Trillions of tokens, compute budgets, scaling laws.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Fine-tuning</span>
+        <span class="desc">Full vs LoRA/QLoRA, and when to fine-tune instead of prompting or RAG.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Post-training</span>
+        <span class="desc">SFT, RLHF, DPO, reinforcement learning with checkable answers.</span></span></li>
+</ol>
+
+<h2>Part C · What to take into account</h2>
+<ol class="curriculum">
+    <li><span class="mark"></span><span class="body"><span class="title">Data</span>
+        <span class="desc">Quality, deduplication, test-set leakage, chat formats.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Hyperparameters and failure modes</span>
+        <span class="desc">Overfitting, loss spikes, forgetting what the model knew.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Evals</span>
+        <span class="desc">How you know training worked.</span></span></li>
+</ol>
+
+<h2>Part D · Hands-on</h2>
+<ol class="curriculum">
+    <li><span class="mark"></span><span class="body"><span class="title">Train a tiny GPT from scratch</span><span class="tag">laptop</span>
+        <span class="desc">In a free Colab notebook.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Fine-tune an open model with LoRA</span><span class="tag">laptop</span>
+        <span class="desc">In a free Colab notebook.</span></span></li>
+</ol>
+
+<h2>Infrastructure alongside</h2>
+<ol class="curriculum">
+    <li class="available" data-quiz-ids="0001"><span class="mark"></span><span class="body">
+        <a href="lessons/0001-will-it-fit.html">Will it fit?</a>
+        <span class="desc">Memory for a model's weights, against GPU memory.</span></span></li>
+    <li class="available" data-quiz-ids="0002"><span class="mark"></span><span class="body">
+        <a href="lessons/0002-the-kv-cache.html">The KV cache</a>
+        <span class="desc">Serving memory per conversation, and how many fit at once.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Training memory</span>
+        <span class="desc">Why training needs several times the memory of serving.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">Training across many GPUs</span>
+        <span class="desc">Data, tensor and pipeline parallelism; FSDP.</span></span></li>
+    <li><span class="mark"></span><span class="body"><span class="title">The cost of a training run</span>
+        <span class="desc">Estimating compute, GPU-hours and dollars.</span></span></li>
+</ol>
+
+<h2>Reference</h2>
+<ul>
+    <li><a href="reference/glossary.html">Glossary</a></li>
+    <li><a href="reference/gpu-sizing.html">GPU sizing cheat sheet</a></li>
+</ul>
+
+<p class="aside">The order adapts as you go. Ask your teacher (Claude) to reorder, skip or go deeper on anything.</p>
+
+</main>
+<script src="assets/progress.js"></script>
+</body>
+</html>

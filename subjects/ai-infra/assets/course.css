@@ -183,3 +183,38 @@ button.primary { background: var(--accent); border-color: var(--accent); color: 
     .no-print { display: none; }
     a { color: #000; }
 }
+
+/* ---- Gradient-descent lab (assets/descent-lab.js) ---- */
+.lab-chart { width: 100%; height: auto; display: block; margin: 0.5rem 0; }
+.lab-axis { stroke: var(--muted); stroke-width: 1; }
+.lab-tick { fill: var(--muted); font-size: 11px; font-family: var(--sans); }
+.lab-dot { fill: var(--text); }
+.lab-line { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.lab-error { stroke: var(--bad); stroke-width: 2; stroke-dasharray: 3 3; }
+.lab-readout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin: 0.5rem 0 0.75rem; text-align: center; }
+.lab-label { display: block; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.lab-value { display: block; font-family: var(--mono); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.lab-slider { width: 100%; height: 44px; accent-color: var(--accent); }
+.lab-note { font-size: 0.95rem; margin: 0.5rem 0 0; }
+.lab-rates { display: flex; gap: 0.5rem; margin-bottom: 0.25rem; }
+.lab-rates button { flex: 1; font-family: var(--mono); }
+.lab-rates button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.lab-log { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); padding-left: 1.2rem; margin: 0.75rem 0 0; overflow-wrap: anywhere; }
+.lab-log li:first-child { color: var(--text); }
+
+/* ---- Curriculum (index.html + assets/progress.js) ---- */
+.curriculum { list-style: none; padding: 0; margin: 0.5rem 0 1rem; font-family: var(--sans); }
+.curriculum li { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.7rem 0; border-bottom: 1px solid var(--rule); }
+.curriculum .mark {
+    flex: 0 0 1.6rem; height: 1.6rem; border-radius: 50%; border: 2px solid var(--rule);
+    display: grid; place-items: center; font-size: 0.85rem; color: transparent; margin-top: 0.1rem;
+}
+.curriculum li.available .mark { border-color: var(--accent); }
+.curriculum li.done .mark { background: var(--good); border-color: var(--good); color: #fff; }
+.curriculum li.done .mark::after { content: "✓"; }
+.curriculum .body { flex: 1; }
+.curriculum .body a, .curriculum .body .title { font-weight: 600; display: inline-block; min-height: 28px; }
+.curriculum .title { color: var(--muted); }
+.curriculum .desc { display: block; font-size: 0.9rem; color: var(--muted); }
+.curriculum .tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 0.1rem 0.35rem; margin-left: 0.35rem; vertical-align: middle; }
+.progress-summary { font-family: var(--sans); color: var(--muted); font-size: 0.9rem; }
