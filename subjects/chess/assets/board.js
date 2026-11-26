@@ -16,6 +16,20 @@
 //     </ul>
 //   </div>
 //   Stats are saved in localStorage under "<subject>:trainer:<id>".
+//
+// 3. Line drill: the learner plays one side of a scripted line from memory.
+//   <div class="line-drill widget" data-drill-id="0002" data-side="black">
+//     <ul class="drill-lines" hidden>
+//       <li data-name="Scholar's mate" data-moves="e2e4 e7e5 f1c4 b8c6/d7d6 …" data-san="e4 e5 Bc4 Nc6/d6 …">
+//         <span data-on="g7g6" data-kind="why">Shown after this right move.</span>
+//         <span data-on="g8f6" data-kind="trap">Shown when the learner tries this wrong move.</span>
+//         <span data-on="g7g6@4" data-kind="trap">Only when tried as ply 4 (1-based half-move).</span>
+//       </li>
+//     </ul>
+//   </div>
+//   Moves alternate White, Black. "a/b" lists moves that are all accepted (with matching
+//   "Nc6/d6" in data-san). The board is shown from the learner's side.
+//   Stats are saved in localStorage under "<subject>:drill:<id>".
 
 (function () {
     const subject = document.body.dataset.subject || "course";
@@ -53,20 +67,23 @@
     function writeJSON(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* storage unavailable */ } }
 
     // Renders 64 square buttons into `container`; White at the bottom.
-    function makeBoard(container, onTap) {
+    // With flipped = true, Black is at the bottom.
+    function makeBoard(container, onTap, flipped = false) {
         const grid = document.createElement("div");
         grid.className = "board";
         grid.setAttribute("role", "grid");
         const squares = {};
-        for (let rank = 8; rank >= 1; rank -= 1) {
-            for (let f = 0; f < 8; f += 1) {
+        for (let row = 0; row < 8; row += 1) {
+            for (let col = 0; col < 8; col += 1) {
+                const rank = flipped ? row + 1 : 8 - row;
+                const f = flipped ? 7 - col : col;
                 const sq = FILES[f] + rank;
                 const cell = document.createElement("button");
                 cell.type = "button";
                 cell.className = "sq " + ((f + rank) % 2 === 0 ? "light" : "dark");
                 cell.dataset.sq = sq;
-                if (f === 0) cell.insertAdjacentHTML("beforeend", `<span class="coord rank">${rank}</span>`);
-                if (rank === 1) cell.insertAdjacentHTML("beforeend", `<span class="coord file">${FILES[f]}</span>`);
+                if (col === 0) cell.insertAdjacentHTML("beforeend", `<span class="coord rank">${rank}</span>`);
+                if (row === 7) cell.insertAdjacentHTML("beforeend", `<span class="coord file">${FILES[f]}</span>`);
                 const piece = document.createElement("span");
                 piece.className = "piece";
                 cell.appendChild(piece);
@@ -253,6 +270,121 @@
             const isWhite = p && p === p.toUpperCase();
             if (selected && selected === "e1" && sq === "h1") { attempt("e1g1"); return; } // king then rook = castle
             if (isWhite) { selected = selected === sq ? null : sq; draw(); return; }
+            if (selected) attempt(selected + sq);
+        }
+        controls.addEventListener("click", start);
+        start();
+        showStats();
+    }
+    // ---- Line drill ----
+    for (const drill of document.querySelectorAll(".line-drill")) {
+        const storageKey = `${subject}:drill:${drill.dataset.drillId || "default"}`;
+        const side = drill.dataset.side === "black" ? 1 : 0; // index parity of the learner's moves
+        const lines = [...drill.querySelectorAll(".drill-lines li")].map((li) => {
+            const notes = {};
+            for (const span of li.querySelectorAll("[data-on]")) {
+                notes[`${span.dataset.kind}:${span.dataset.on}`] = span.innerHTML;
+            }
+            return {
+                name: li.dataset.name,
+                moves: li.dataset.moves.trim().split(/\s+/).map((t) => t.split("/")),
+                san: li.dataset.san.trim().split(/\s+/).map((t) => t.split("/")),
+                notes,
+            };
+        });
+        const holder = document.createElement("div");
+        drill.appendChild(holder);
+        const render = makeBoard(holder, tap, side === 1);
+        const feedback = document.createElement("p");
+        feedback.className = "trainer-feedback";
+        feedback.setAttribute("aria-live", "polite");
+        const log = document.createElement("p");
+        log.className = "trainer-moves mono";
+        const controls = document.createElement("div");
+        controls.className = "walk-controls";
+        controls.innerHTML = `<button type="button" class="primary">New game</button>`;
+        const stats = document.createElement("p");
+        stats.className = "drill-stats";
+        holder.after(feedback, log, controls, stats);
+
+        let board, line, ply, selected, misses, mistakes, last, hint, finished, sanLog;
+        let cursor = Math.floor(Math.random() * lines.length);
+        const mine = (p) => p && (side === 0 ? p === p.toUpperCase() : p === p.toLowerCase());
+
+        function showStats() {
+            const s = readJSON(storageKey);
+            stats.textContent = s ? `Games finished: ${s.runs} · without a mistake: ${s.clean}` : "";
+        }
+        function draw() {
+            render(board, { last, selected, hint });
+            log.textContent = sanLog.map((m, i) => (i % 2 === 0 ? `${i / 2 + 1}. ` : "") + m).join(" ");
+        }
+        function play(uci, san) {
+            applyMove(board, uci);
+            sanLog.push(san);
+            last = [uci.slice(0, 2), uci.slice(2, 4)];
+            ply += 1;
+        }
+        function opponentMoves() {
+            const san = line.san[ply][0];
+            play(line.moves[ply][0], san);
+            return san;
+        }
+        function finish(prefix) {
+            finished = true;
+            const s = readJSON(storageKey) || { runs: 0, clean: 0 };
+            s.runs += 1;
+            if (mistakes === 0) s.clean += 1;
+            writeJSON(storageKey, s);
+            feedback.className = "trainer-feedback right";
+            feedback.innerHTML = `${prefix} <strong>Line complete${mistakes === 0 ? ", no mistakes" : ` (${mistakes} slip${mistakes === 1 ? "" : "s"})`}.</strong> Tap New game for another.`;
+            showStats();
+        }
+        function start() {
+            line = lines[cursor % lines.length];
+            cursor += 1 + Math.floor(Math.random() * (lines.length - 1));
+            board = parse(START);
+            ply = 0; selected = null; misses = 0; mistakes = 0;
+            last = null; hint = null; finished = false; sanLog = [];
+            let intro = `${line.name}. You're ${side ? "Black" : "White"}.`;
+            if (side === 1) intro += ` White plays ${opponentMoves()}. Your move.`;
+            else intro += " Your move.";
+            feedback.className = "trainer-feedback";
+            feedback.textContent = intro;
+            draw();
+        }
+        function attempt(uci) {
+            const options = line.moves[ply];
+            const index = options.indexOf(uci);
+            if (index < 0) {
+                misses += 1; mistakes += 1;
+                let msg = line.notes[`trap:${uci}@${ply + 1}`] || line.notes[`trap:${uci}`]
+                    || "Not that one. What is your opponent threatening?";
+                if (misses >= 2) { hint = options[0].slice(0, 2); msg += " The highlighted piece moves next."; }
+                feedback.className = "trainer-feedback wrong";
+                feedback.innerHTML = msg;
+                selected = null;
+                draw();
+                return;
+            }
+            const san = line.san[ply][index];
+            play(uci, san);
+            selected = null; hint = null; misses = 0;
+            const why = line.notes[`why:${uci}`] || "";
+            if (ply >= line.moves.length) { finish(`${san}: ${why}`); draw(); return; }
+            const reply = opponentMoves();
+            feedback.className = "trainer-feedback right";
+            feedback.innerHTML = `${san}: ${why} ${side ? "White" : "Black"} plays <strong>${reply}</strong>.`;
+            if (ply >= line.moves.length) finish(feedback.innerHTML);
+            draw();
+        }
+        function tap(sq) {
+            if (finished) return;
+            const p = board[sq];
+            if (selected && board[selected] && board[selected].toLowerCase() === "k" && (sq === "h1" || sq === "h8")) {
+                attempt(selected + "g" + sq[1]); return; // king then rook = castle short
+            }
+            if (mine(p)) { selected = selected === sq ? null : sq; draw(); return; }
             if (selected) attempt(selected + sq);
         }
         controls.addEventListener("click", start);
