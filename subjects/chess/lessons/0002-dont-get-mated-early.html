@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2 · Don't get mated early</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="chess">
+<main>
+
+<p class="eyebrow"><a href="../index.html">Chess Openings</a> · Lesson 2 · ~8 min</p>
+<h1>Don't get mated early</h1>
+<p class="lede">Your friend brings the queen out early, aiming at f7. Here's how to stop it in two moves and come out ahead.</p>
+
+<p class="mission"><strong>Why this now.</strong> Scholar's mate is the most common way casual games end in under five moves. When you play Black, a friend will try it sooner or later. One defence handles every version of it.</p>
+
+<h2>Warm-up: from last time</h2>
+<div class="quiz widget" data-quiz-id="0002-warmup">
+    <fieldset class="q" data-answer="2">
+        <legend>The Italian setup's first three moves, in order:</legend>
+        <div class="options"><button>e4, Bc4, Nf3</button><button>Nf3, e4, Bc4</button><button>e4, Nf3, Bc4</button><button>e4, Nf3, c3</button></div>
+        <p class="why" hidden>e4, Nf3, Bc4. After that come c3, d3 and castling, in any order.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>You're White in the Italian. A black knight lands on f6 before you've played d3. Now:</legend>
+        <div class="options"><button>Castle at once</button><button>Play d3 first</button><button>Play c3 first</button><button>Attack the knight</button></div>
+        <p class="why" hidden>The knight attacks e4, so defend it with d3 first.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<h2>Three new symbols</h2>
+<p><code>+</code> means check. <code>#</code> means checkmate. <code>??</code> after a move means "a terrible mistake" (a <strong>blunder</strong>)<sup><a href="#s3">3</a></sup>.</p>
+
+<h2>The weak square: f7</h2>
+<p>At the start, the pawn on f7 is defended only by Black's king. Chess.com calls it weak for exactly that reason<sup><a href="#s1">1</a></sup>. Two white pieces aimed at it, with nothing else guarding it, can mean checkmate. In lesson 1, your bishop on c4 aimed at f7 for the same reason.</p>
+
+<h2>Scholar's mate</h2>
+<div class="walk widget">
+    <ol class="walk-notes">
+        <li data-move="e2e4" data-san="1. e4">A normal start.</li>
+        <li data-move="e7e5" data-san="1… e5">You answer the same way.</li>
+        <li data-move="f1c4" data-san="2. Bc4">The bishop aims at f7.</li>
+        <li data-move="b8c6" data-san="2… Nc6">A good developing move.</li>
+        <li data-move="d1h5" data-san="3. Qh5">The queen joins in. Now two pieces hit f7, and only your king defends it. White threatens Qxf7#.</li>
+        <li data-move="g8f6" data-san="3… Nf6??">A natural move: it attacks the queen. But it doesn't stop the threat.</li>
+        <li data-move="h5f7" data-san="4. Qxf7#">Checkmate. The bishop protects the queen, so your king can't take it, and it has no square to escape to<sup><a href="#s1">1</a></sup>.</li>
+    </ol>
+</div>
+
+<h2>The defence: g6, then Nf6</h2>
+<p>Go back to the position after 3. Qh5. The move to play is <strong>3… g6</strong>. It blocks the queen's path to f7, and it attacks the queen, so White has to spend a move saving it. Chess.com calls it the most sensible response<sup><a href="#s1">1</a></sup>.</p>
+<p>White often tries again with <strong>4. Qf3</strong>, threatening Qxf7# along the f-file. Block it with <strong>4… Nf6</strong>, which also develops a knight. Now f7 is safe, and you've brought out a piece while White has been moving the queen around<sup><a href="#s2">2</a></sup>.</p>
+<p class="formula">Queen hits f7: block it, and attack the queen if you can.</p>
+
+<h3>The trap inside the trap</h3>
+<p>Sometimes the queen comes out on move 2: <code>1. e4 e5 2. Qh5</code>. Now <strong>don't</strong> play g6 yet. The queen also attacks your e5 pawn, and after 2… g6?? 3. Qxe5+ it checks your king <em>and</em> attacks your rook on h8 at the same time. That's a <strong>fork</strong>, and you lose the rook. Defend e5 first with <strong>2… Nc6</strong>; Wikipedia calls it the cleanest defence<sup><a href="#s2">2</a></sup>. After 3. Bc4, f7 is under threat again, so now g6 is right.</p>
+
+<h2>Practice: defend as Black</h2>
+<p>You're Black now, so the board is turned around. Your friend tries three versions of the attack. Find the defence each time.</p>
+
+<div class="line-drill widget" data-drill-id="0002" data-side="black">
+    <ul class="drill-lines" hidden>
+        <li data-name="Scholar's mate" data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6" data-san="e4 e5 Bc4 Nc6 Qh5 g6 Qf3 Nf6">
+            <span data-on="e7e5" data-kind="why">your pawn takes the centre.</span>
+            <span data-on="b8c6" data-kind="why">develops a knight and defends e5.</span>
+            <span data-on="g7g6" data-kind="why">blocks the queen and attacks it.</span>
+            <span data-on="g8f6" data-kind="why">blocks the f-file, and the knight is developed. f7 is safe.</span>
+            <span data-on="g8f6" data-kind="trap">Then Qxf7 is checkmate. Your knight attacks the queen but doesn't stop the threat on f7.</span>
+            <span data-on="f8c5" data-kind="trap">Then Qxf7 is checkmate. Nothing new guards f7.</span>
+            <span data-on="d7d6" data-kind="trap">Then Qxf7 is checkmate. Nothing new guards f7.</span>
+            <span data-on="f8g7" data-kind="trap">Then Qxf7 is checkmate along the f-file.</span>
+            <span data-on="d8e7" data-kind="trap">That does guard f7, but it blocks your bishop and brings your queen out early. There's a move that defends and also attacks White's queen.</span>
+            <span data-on="d8f6" data-kind="trap">That guards f7, but your queen is out early and in the way of your knight. Find a move that blocks instead.</span>
+        </li>
+        <li data-name="Queen out on move 2" data-moves="e2e4 e7e5 d1h5 b8c6/d7d6 f1c4 g7g6 h5f3 g8f6" data-san="e4 e5 Qh5 Nc6/d6 Bc4 g6 Qf3 Nf6">
+            <span data-on="e7e5" data-kind="why">your pawn takes the centre.</span>
+            <span data-on="b8c6" data-kind="why">defends e5 and develops a knight.</span>
+            <span data-on="d7d6" data-kind="why">defends e5. (Nc6 does the same and develops a piece.)</span>
+            <span data-on="g7g6" data-kind="why">now f7 is the target, so block the queen and attack it.</span>
+            <span data-on="g8f6" data-kind="why">blocks the f-file and develops. f7 is safe.</span>
+            <span data-on="g7g6@4" data-kind="trap">Not yet. Then Qxe5+ checks your king and hits your rook on h8 at the same time. Defend e5 first.</span>
+            <span data-on="g8f6@4" data-kind="trap">Then Qxe5+ wins your e5 pawn with check. Defend e5 first.</span>
+            <span data-on="f8c5@4" data-kind="trap">Then Qxe5+ wins your e5 pawn with check. Defend e5 first.</span>
+            <span data-on="g8f6" data-kind="trap">Then Qxf7 is checkmate. Your knight attacks the queen but doesn't stop the threat on f7.</span>
+            <span data-on="f8c5" data-kind="trap">Then Qxf7 is checkmate. Nothing new guards f7.</span>
+            <span data-on="d8e7" data-kind="trap">That works, but it blocks your bishop. Defend with a minor piece or pawn instead.</span>
+        </li>
+        <li data-name="Queen on f3" data-moves="e2e4 e7e5 f1c4 b8c6 d1f3 g8f6" data-san="e4 e5 Bc4 Nc6 Qf3 Nf6">
+            <span data-on="e7e5" data-kind="why">your pawn takes the centre.</span>
+            <span data-on="b8c6" data-kind="why">develops a knight and defends e5.</span>
+            <span data-on="g8f6" data-kind="why">blocks the f-file and develops a knight. Same idea, quicker version.</span>
+            <span data-on="f8c5" data-kind="trap">Then Qxf7 is checkmate along the f-file.</span>
+            <span data-on="d7d6" data-kind="trap">Then Qxf7 is checkmate along the f-file.</span>
+            <span data-on="g7g6" data-kind="trap">That doesn't block the f-file: Qxf7 is checkmate.</span>
+        </li>
+    </ul>
+</div>
+
+<p>Play until you've had each version and got all three right without a slip.</p>
+
+<h2>Why not do it yourself?</h2>
+<p>Against someone who knows the defence, an early queen just gets chased: g6 and Nf6 each develop with gain of time, and Black ends up ahead in development. Chess.com notes stronger players rarely try it for that reason<sup><a href="#s1">1</a></sup>. Your Italian setup aims at f7 too, but slowly and safely, without putting the queen at risk.</p>
+
+<p class="aside">The same weakness exists on f2 for White. In your Italian setup, castling puts your rook on f1, where it guards f2.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz widget" data-quiz-id="0002">
+    <fieldset class="q" data-answer="1">
+        <legend>1. 1. e4 e5 2. Bc4 Nc6 3. Qh5. What does White threaten?</legend>
+        <div class="options"><button>Qxe5, check</button><button>Qxf7, checkmate</button><button>Bxf7, check</button><button>Qxh7, capture</button></div>
+        <p class="why" hidden>Queen and bishop both hit f7, which only the king defends: Qxf7#.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="3">
+        <legend>2. Same position. Your best move?</legend>
+        <div class="options"><button>Nf6</button><button>Bc5</button><button>Qe7</button><button>g6</button></div>
+        <p class="why" hidden>g6 blocks and attacks the queen. Qe7 also holds, but blocks your bishop. Nf6 and Bc5 lose to Qxf7#.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>3. After 3… g6 4. Qf3, your move?</legend>
+        <div class="options"><button>Nf6</button><button>Bc5</button><button>d6</button><button>Bg7</button></div>
+        <p class="why" hidden>The queen now hits f7 along the f-file. Nf6 blocks it. The others allow Qxf7#.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="2">
+        <legend>4. Why is f7 weak early on?</legend>
+        <div class="options"><button>Queen alone guards it</button><button>It sits on edge</button><button>King alone guards it</button><button>It's a centre square</button></div>
+        <p class="why" hidden>Only the king defends f7, so two attackers can be enough.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>5. 1. e4 e5 2. Qh5. Why is 2… g6 a blunder?</legend>
+        <div class="options"><button>It shuts in bishop</button><button>Qxe5+ hits king, rook</button><button>It allows Qxf7 mate</button><button>It hangs the queen</button></div>
+        <p class="why" hidden>Qxe5+ forks your king and the rook on h8. Defend e5 with Nc6 first.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<div class="next">
+    <p><strong>Your win:</strong> you can stop Scholar's mate in all three versions, and you know the one move order where g6 is a mistake.</p>
+    <p><strong>Try it for real:</strong> you still owe three games as White with the Italian setup. When you play Black and the queen comes out early, look at f7.</p>
+    <p><strong>Keep handy:</strong> <a href="../reference/early-attacks.html">Early attacks on one page</a> · <a href="../reference/italian-setup.html">The Italian setup</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../index.html">Course home</a></p>
+    <p><strong>Read next (primary source):</strong> Chess.com's <a href="https://www.chess.com/terms/scholars-mate-chess">"Scholar's Mate"</a> page. It shows the mate, the defences and why the attack is risky.</p>
+    <p><strong>Questions?</strong> Ask your teacher (Claude): "what if they play Qh5 and I've already played Nf6?", "how do I punish the queen?". And tell me how the drill and your games went.</p>
+</div>
+
+<hr>
+<h2>Sources</h2>
+<ol class="sources">
+    <li id="s1">Chess.com, <a href="https://www.chess.com/terms/scholars-mate-chess">"Scholar's Mate"</a>. The mating line, why f7 is weak, 3… g6 as the main defence, and why the attack is risky.</li>
+    <li id="s2">Wikipedia, <a href="https://en.wikipedia.org/wiki/Scholar%27s_mate">"Scholar's mate"</a>. 2. Qh5 Nc6 as the cleanest defence; 3. Bc4 g6 4. Qf3 Nf6.</li>
+    <li id="s3">Chess.com, <a href="https://www.chess.com/terms/chess-notation">"Chess notation"</a>. Symbols for check, checkmate and move quality.</li>
+</ol>
+
+</main>
+<script src="../assets/quiz.js"></script>
+<script src="../assets/board.js"></script>
+</body>
+</html>
