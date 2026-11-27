@@ -31,31 +31,46 @@
 </div>
 
 <h2>Three new symbols</h2>
-<p><code>+</code> means check. <code>#</code> means checkmate. <code>??</code> after a move means "a terrible mistake" (a <strong>blunder</strong>)<sup><a href="#s3">3</a></sup>.</p>
+<p><code>+</code> means check. <code>#</code> means checkmate. <code>??</code> after a move means "a terrible mistake" (a <strong>blunder</strong>)<sup><a href="#s3">3</a></sup>. And <code>x</code> means a capture: <code>Qxf7</code> is "queen takes on f7".</p>
+<p>In this lesson you're Black, so the boards are shown from your side: your pieces at the bottom, and the letters run h to a. The <a href="../reference/notation.html">notation page</a> has a drill for finding squares from either side.</p>
 
 <h2>The weak square: f7</h2>
 <p>At the start, the pawn on f7 is defended only by Black's king. Chess.com calls it weak for exactly that reason<sup><a href="#s1">1</a></sup>. Two white pieces aimed at it, with nothing else guarding it, can mean checkmate. In lesson 1, your bishop on c4 aimed at f7 for the same reason.</p>
+<figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5" data-arrows="c4f7 h5f7" data-rings="f7">
+    <figcaption>Bishop and queen both aim at <strong>f7</strong>. Only your king guards it.</figcaption>
+</figure>
 
 <h2>Scholar's mate</h2>
-<div class="walk widget">
+<div class="walk widget" data-flip>
     <ol class="walk-notes">
         <li data-move="e2e4" data-san="1. e4">A normal start.</li>
         <li data-move="e7e5" data-san="1… e5">You answer the same way.</li>
         <li data-move="f1c4" data-san="2. Bc4">The bishop aims at f7.</li>
         <li data-move="b8c6" data-san="2… Nc6">A good developing move.</li>
-        <li data-move="d1h5" data-san="3. Qh5">The queen joins in. Now two pieces hit f7, and only your king defends it. White threatens Qxf7#.</li>
+        <li data-move="d1h5" data-san="3. Qh5" data-arrows="h5f7 c4f7" data-rings="f7">The queen joins in. Now two pieces hit f7, and only your king defends it. White threatens Qxf7#.</li>
         <li data-move="g8f6" data-san="3… Nf6??">A natural move: it attacks the queen. But it doesn't stop the threat.</li>
-        <li data-move="h5f7" data-san="4. Qxf7#">Checkmate. The bishop protects the queen, so your king can't take it, and it has no square to escape to<sup><a href="#s1">1</a></sup>.</li>
+        <li data-move="h5f7" data-san="4. Qxf7#" data-rings="e8">Checkmate. The bishop protects the queen, so your king can't take it, and it has no square to escape to<sup><a href="#s1">1</a></sup>.</li>
     </ol>
 </div>
 
 <h2>The defence: g6, then Nf6</h2>
 <p>Go back to the position after 3. Qh5. The move to play is <strong>3… g6</strong>. It blocks the queen's path to f7, and it attacks the queen, so White has to spend a move saving it. Chess.com calls it the most sensible response<sup><a href="#s1">1</a></sup>.</p>
 <p>White often tries again with <strong>4. Qf3</strong>, threatening Qxf7# along the f-file. Block it with <strong>4… Nf6</strong>, which also develops a knight. Now f7 is safe, and you've brought out a piece while White has been moving the queen around<sup><a href="#s2">2</a></sup>.</p>
+<div class="diagram-pair">
+    <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6" data-arrows="g6h5">
+        <figcaption><strong>3… g6</strong> blocks the queen's path to f7 and attacks the queen.</figcaption>
+    </figure>
+    <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6" data-arrows="f3f6" data-rings="f6">
+        <figcaption>After <strong>4. Qf3</strong>, <strong>4… Nf6</strong> blocks the f-file.</figcaption>
+    </figure>
+</div>
 <p class="formula">Queen hits f7: block it, and attack the queen if you can.</p>
 
 <h3>The trap inside the trap</h3>
 <p>Sometimes the queen comes out on move 2: <code>1. e4 e5 2. Qh5</code>. Now <strong>don't</strong> play g6 yet. The queen also attacks your e5 pawn, and after 2… g6?? 3. Qxe5+ it checks your king <em>and</em> attacks your rook on h8 at the same time. That's a <strong>fork</strong>, and you lose the rook. Defend e5 first with <strong>2… Nc6</strong>; Wikipedia calls it the cleanest defence<sup><a href="#s2">2</a></sup>. After 3. Bc4, f7 is under threat again, so now g6 is right.</p>
+<figure class="diagram" data-flip data-moves="e2e4 e7e5 d1h5 g7g6 h5e5" data-arrows="e5e8 e5h8" data-rings="h8">
+    <figcaption>After <strong>2… g6?? 3. Qxe5+</strong>: the queen checks the king and attacks the rook on h8 at once.</figcaption>
+</figure>
 
 <h2>Practice: defend as Black</h2>
 <p>You're Black now, so the board is turned around. Your friend tries three versions of the attack. Find the defence each time.</p>
@@ -109,6 +124,7 @@
 <div class="quiz widget" data-quiz-id="0002">
     <fieldset class="q" data-answer="1">
         <legend>1. 1. e4 e5 2. Bc4 Nc6 3. Qh5. What does White threaten?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5"></figure>
         <div class="options"><button>Qxe5, check</button><button>Qxf7, checkmate</button><button>Bxf7, check</button><button>Qxh7, capture</button></div>
         <p class="why" hidden>Queen and bishop both hit f7, which only the king defends: Qxf7#.</p>
     </fieldset>
@@ -119,6 +135,7 @@
     </fieldset>
     <fieldset class="q" data-answer="0">
         <legend>3. After 3… g6 4. Qf3, your move?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3"></figure>
         <div class="options"><button>Nf6</button><button>Bc5</button><button>d6</button><button>Bg7</button></div>
         <p class="why" hidden>The queen now hits f7 along the f-file. Nf6 blocks it. The others allow Qxf7#.</p>
     </fieldset>
@@ -129,6 +146,7 @@
     </fieldset>
     <fieldset class="q" data-answer="1">
         <legend>5. 1. e4 e5 2. Qh5. Why is 2… g6 a blunder?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 d1h5"></figure>
         <div class="options"><button>It shuts in bishop</button><button>Qxe5+ hits king, rook</button><button>It allows Qxf7 mate</button><button>It hangs the queen</button></div>
         <p class="why" hidden>Qxe5+ forks your king and the rook on h8. Defend e5 with Nc6 first.</p>
     </fieldset>
@@ -138,7 +156,7 @@
 <div class="next">
     <p><strong>Your win:</strong> you can stop Scholar's mate in all three versions, and you know the one move order where g6 is a mistake.</p>
     <p><strong>Try it for real:</strong> you still owe three games as White with the Italian setup. When you play Black and the queen comes out early, look at f7.</p>
-    <p><strong>Keep handy:</strong> <a href="../reference/early-attacks.html">Early attacks on one page</a> · <a href="../reference/italian-setup.html">The Italian setup</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../index.html">Course home</a></p>
+    <p><strong>Keep handy:</strong> <a href="../reference/early-attacks.html">Early attacks on one page</a> · <a href="../reference/italian-setup.html">The Italian setup</a> · <a href="../reference/notation.html">Notation</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../index.html">Course home</a></p>
     <p><strong>Read next (primary source):</strong> Chess.com's <a href="https://www.chess.com/terms/scholars-mate-chess">"Scholar's Mate"</a> page. It shows the mate, the defences and why the attack is risky.</p>
     <p><strong>Questions?</strong> Ask your teacher (Claude): "what if they play Qh5 and I've already played Nf6?", "how do I punish the queen?". And tell me how the drill and your games went.</p>
 </div>

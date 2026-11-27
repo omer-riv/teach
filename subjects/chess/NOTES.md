@@ -3,7 +3,7 @@
 ## About the learner
 - Casual player: plays now and then, no openings, no rating. Plays on a phone app.
 - Goal is beating friends/family, so favour simple plans over theory.
-- Started with White. Explained algebraic notation in lesson 1; don't assume it's fluent yet.
+- Started with White. Finds notation tricky (said so after lesson 2): every position named in a lesson or quiz gets a `.diagram` picture (with arrows/rings for threats), and moves are spelled out on boards. Point to reference/notation.html and its square finder.
 
 ## Curriculum (mirrors index.html; update both together)
 White: the Italian
@@ -19,3 +19,4 @@ Black
 ## Session log
 - 2026-11-26: Mission interview (friends/family, casual, White first, online app). Lesson 0001 published. Ask how the trainer and real games went.
 - 2026-11-26: Lesson 1 done: quiz 4/5 (which one missed unknown), trainer easy with no slips. No real games yet. Published lesson 0002 (Scholar's mate defence, first lesson as Black). Ask how it went and whether real games happened.
+- 2026-11-27: Finished lesson 2 (score not yet reported). Asked for more board pictures: added diagrams to lessons 1–2 and references, spelled-out moves, and a notation reference page with a square-finding drill.

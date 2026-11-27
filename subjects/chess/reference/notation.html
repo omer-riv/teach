@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading chess notation</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="chess">
+<main>
+<p class="eyebrow"><a href="../index.html">Chess Openings</a> · Reference</p>
+<h1>Reading chess notation</h1>
+<p class="lede">How to read a move like <code>Nf3</code> or <code>Qxf7#</code>, with pictures.</p>
+
+<h2>1. Every square has a name</h2>
+<p>A letter for the column (a to h), then a number for the row (1 to 8). From White's side, a is on the left and row 1 is nearest you<sup><a href="#s1">1</a></sup>.</p>
+<figure class="diagram" data-fen="8/8/8/8/8/8/8/8" data-rings="a1 e4 h8 c6">
+    <figcaption>The circles: <strong>a1</strong> (bottom left), <strong>e4</strong>, <strong>c6</strong>, <strong>h8</strong> (top right).</figcaption>
+</figure>
+<p>From Black's side everything turns around: h is on the left and row 8 is nearest you. The squares keep their names.</p>
+<figure class="diagram" data-flip data-fen="8/8/8/8/8/8/8/8" data-rings="a1 e4 h8 c6">
+    <figcaption>The same four squares, seen from Black's side.</figcaption>
+</figure>
+
+<h2>Practice: find the square</h2>
+<p>Tap the square named. Try it from both sides. A streak of 10 means you've got it.</p>
+<div class="square-finder widget" data-finder-id="squares"></div>
+
+<h2>2. A move is a piece plus a square</h2>
+<div class="table-wrap"><table>
+    <tr><th>Letter</th><th>Piece</th></tr>
+    <tr><td class="mono">K</td><td>King</td></tr>
+    <tr><td class="mono">Q</td><td>Queen</td></tr>
+    <tr><td class="mono">R</td><td>Rook</td></tr>
+    <tr><td class="mono">B</td><td>Bishop</td></tr>
+    <tr><td class="mono">N</td><td>Knight (K is taken by the king)</td></tr>
+    <tr><td class="mono">none</td><td>Pawn</td></tr>
+</table></div>
+<p>The square is where the piece <em>lands</em>. You don't write where it came from.</p>
+
+<div class="diagram-pair">
+    <figure class="diagram" data-arrows="e2e4" data-no-last>
+        <figcaption><strong>e4</strong>: pawn to e4.</figcaption>
+    </figure>
+    <figure class="diagram" data-moves="e2e4 e7e5" data-arrows="g1f3" data-no-last>
+        <figcaption><strong>Nf3</strong>: knight to f3.</figcaption>
+    </figure>
+    <figure class="diagram" data-moves="e2e4 e7e5 g1f3 b8c6" data-arrows="f1c4" data-no-last>
+        <figcaption><strong>Bc4</strong>: bishop to c4.</figcaption>
+    </figure>
+    <figure class="diagram" data-moves="e2e4 e7e5 g1f3 b8c6 f1c4 g8f6" data-arrows="e1g1 h1f1" data-no-last>
+        <figcaption><strong>O-O</strong>: castle on the king's side. King two squares, rook jumps over.</figcaption>
+    </figure>
+</div>
+
+<h2>3. Extra symbols</h2>
+<div class="table-wrap"><table>
+    <tr><th>Symbol</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td class="mono">x</td><td>takes (a capture)</td><td class="mono">Qxf7: queen takes on f7</td></tr>
+    <tr><td class="mono">+</td><td>check</td><td class="mono">Qxe5+</td></tr>
+    <tr><td class="mono">#</td><td>checkmate</td><td class="mono">Qxf7#</td></tr>
+    <tr><td class="mono">O-O</td><td>castle king's side (some apps: 0-0)</td><td></td></tr>
+    <tr><td class="mono">O-O-O</td><td>castle queen's side</td><td></td></tr>
+    <tr><td class="mono">??</td><td>a blunder</td><td class="mono">3… Nf6??</td></tr>
+</table></div>
+<figure class="diagram" data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g8f6 h5f7" data-rings="e8">
+    <figcaption><strong>Qxf7#</strong>: the queen takes on f7, with checkmate (the king, circled, can't escape).</figcaption>
+</figure>
+
+<h2>4. Move numbers</h2>
+<p>Each number covers one White move and one Black move: <code>1. e4 e5</code> means White played e4, then Black played e5. When a line starts with Black's move, it uses three dots: <code>3… Nf6</code> means "Black's 3rd move, knight to f6".</p>
+
+<p class="aside">Used in every lesson. Back to <a href="../lessons/0001-the-italian-setup.html">lesson 1</a> · <a href="../lessons/0002-dont-get-mated-early.html">lesson 2</a> · <a href="glossary.html">glossary</a>.</p>
+
+<hr>
+<ol class="sources">
+    <li id="s1">Chess.com, <a href="https://www.chess.com/terms/chess-notation">"Chess notation"</a>.</li>
+</ol>
+</main>
+<script src="../assets/board.js"></script>
+</body>
+</html>
