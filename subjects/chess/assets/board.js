@@ -17,6 +17,14 @@
 //   </div>
 //   Stats are saved in localStorage under "<subject>:trainer:<id>".
 //
+// 0. Diagram: a still picture of a position, with optional arrows and circled squares.
+//   <figure class="diagram" data-moves="e2e4 e7e5" data-arrows="d1h5 h5f7" data-rings="f7"
+//           data-flip>  <figcaption>Caption.</figcaption></figure>
+//   Walkthrough notes take data-arrows and data-rings too.
+//
+// 4. Square finder: <div class="square-finder widget" data-finder-id="squares"></div>
+//   Names a square; the learner taps it. Best streak saved under "<subject>:finder:<id>".
+//
 // 3. Line drill: the learner plays one side of a scripted line from memory.
 //   <div class="line-drill widget" data-drill-id="0002" data-side="black">
 //     <ul class="drill-lines" hidden>
@@ -38,6 +46,26 @@
     // Filled glyphs for both colours (CSS colours them); U+FE0E keeps iOS from drawing emoji.
     const GLYPH = { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
     const NAME = { k: "king", q: "queen", r: "rook", b: "bishop", n: "knight", p: "pawn" };
+    const LETTER = { K: "king", Q: "queen", R: "rook", B: "bishop", N: "knight" };
+
+    // "Nf3" -> "knight to f3", "Qxf7#" -> "queen takes on f7, checkmate", "O-O" -> "castles".
+    function spell(san) {
+        const clean = san.replace(/^\d+(\.\.\.|\.|…)\s*/, "").replace(/[?!]+$/, "");
+        if (/^O-O-O/.test(clean)) return "castles on the queen's side";
+        if (/^O-O/.test(clean)) return "castles on the king's side";
+        const m = clean.match(/^([KQRBN])?([a-h])?x?([a-h][1-8])([+#])?$/);
+        if (!m) return "";
+        const piece = m[1] ? LETTER[m[1]] : "pawn";
+        const takes = clean.includes("x");
+        let text = `${piece} ${takes ? "takes on" : "to"} ${m[3]}`;
+        if (m[4] === "+") text += ", check";
+        if (m[4] === "#") text += ", checkmate";
+        return text;
+    }
+    function withSpell(san) {
+        const words = spell(san);
+        return words ? `${san} <span class="spell">(${words})</span>` : san;
+    }
 
     function parse(fen) {
         const board = {};
@@ -94,8 +122,42 @@
             }
         }
         container.appendChild(grid);
+        const NS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("class", "arrows");
+        svg.setAttribute("viewBox", "0 0 8 8");
+        svg.setAttribute("aria-hidden", "true");
+        const markerId = "ah" + Math.random().toString(36).slice(2, 8);
+        svg.innerHTML = `<defs><marker id="${markerId}" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="arrow-head"/></marker></defs><g></g>`;
+        grid.appendChild(svg);
+        const layer = svg.querySelector("g");
+        const centre = (sq) => {
+            const f = FILES.indexOf(sq[0]), rank = Number(sq[1]);
+            return flipped ? [7 - f + 0.5, rank - 1 + 0.5] : [f + 0.5, 8 - rank + 0.5];
+        };
 
         return function render(board, marks = {}) {
+            layer.innerHTML = "";
+            for (const sq of marks.rings || []) {
+                const [x, y] = centre(sq);
+                const c = document.createElementNS(NS, "circle");
+                c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 0.44);
+                c.setAttribute("class", "ring");
+                layer.appendChild(c);
+            }
+            for (const a of marks.arrows || []) {
+                const [x1, y1] = centre(a.slice(0, 2)), [x2, y2] = centre(a.slice(2, 4));
+                const len = Math.hypot(x2 - x1, y2 - y1);
+                const k = (len - 0.35) / len; // stop short of the centre so the head sits on the square
+                const l = document.createElementNS(NS, "line");
+                l.setAttribute("x1", x1); l.setAttribute("y1", y1);
+                l.setAttribute("x2", x1 + (x2 - x1) * k); l.setAttribute("y2", y1 + (y2 - y1) * k);
+                l.setAttribute("class", "arrow");
+                l.setAttribute("marker-end", `url(#${markerId})`);
+                layer.appendChild(l);
+            }
             for (const [sq, { cell, piece }] of Object.entries(squares)) {
                 const p = board[sq];
                 piece.textContent = p ? GLYPH[p.toLowerCase()] + "︎" : "";
@@ -115,7 +177,7 @@
         const intro = walk.dataset.intro || "Tap Next to play the first move.";
         const holder = document.createElement("div");
         walk.prepend(holder);
-        const render = makeBoard(holder, null);
+        const render = makeBoard(holder, null, walk.hasAttribute("data-flip"));
         const status = document.createElement("p");
         status.className = "walk-status";
         status.setAttribute("aria-live", "polite");
@@ -132,9 +194,16 @@
             const board = parse(START);
             notes.slice(0, at).forEach((li) => applyMove(board, li.dataset.move));
             const current = notes[at - 1];
-            render(board, { last: current ? [current.dataset.move.slice(0, 2), current.dataset.move.slice(2, 4)] : null });
+            const list = (v) => (v ? v.trim().split(/\s+/) : []);
+            render(board, {
+                last: current ? [current.dataset.move.slice(0, 2), current.dataset.move.slice(2, 4)] : null,
+                arrows: list(current?.dataset.arrows),
+                rings: list(current?.dataset.rings),
+            });
             notes.forEach((li, i) => { li.hidden = i !== at - 1; });
-            status.innerHTML = current ? `<strong>${current.dataset.san}</strong> · move ${at} of ${notes.length}` : intro;
+            status.innerHTML = current
+                ? `<strong>${current.dataset.san}</strong> ${spell(current.dataset.san) ? `<span class="spell">${spell(current.dataset.san)}</span>` : ""}<br><span class="walk-count">move ${at} of ${notes.length}</span>`
+                : intro;
             controls.querySelector('[data-act="back"]').disabled = at === 0;
             controls.querySelector('[data-act="next"]').disabled = at === notes.length;
         }
@@ -246,7 +315,7 @@
             sanLog.push(SETUP[uci].san);
             selected = null; hint = null; misses = 0;
             last = [uci.slice(0, 2), uci.slice(2, 4)];
-            let msg = `${SETUP[uci].san}: ${SETUP[uci].why}`;
+            let msg = `${withSpell(SETUP[uci].san)}: ${SETUP[uci].why}`;
             if (played.length === ORDER.length) {
                 finished = true;
                 const s = readJSON(storageKey) || { runs: 0, clean: 0 };
@@ -261,7 +330,7 @@
             }
             const san = blackReplies();
             feedback.className = "trainer-feedback right";
-            feedback.textContent = `${msg} Black replies ${san}.`;
+            feedback.innerHTML = `${msg} Black replies <strong>${withSpell(san)}</strong>.`;
             draw();
         }
         function tap(sq) {
@@ -347,10 +416,10 @@
             ply = 0; selected = null; misses = 0; mistakes = 0;
             last = null; hint = null; finished = false; sanLog = [];
             let intro = `${line.name}. You're ${side ? "Black" : "White"}.`;
-            if (side === 1) intro += ` White plays ${opponentMoves()}. Your move.`;
+            if (side === 1) intro += ` White plays ${withSpell(opponentMoves())}. Your move.`;
             else intro += " Your move.";
             feedback.className = "trainer-feedback";
-            feedback.textContent = intro;
+            feedback.innerHTML = intro;
             draw();
         }
         function attempt(uci) {
@@ -371,10 +440,10 @@
             play(uci, san);
             selected = null; hint = null; misses = 0;
             const why = line.notes[`why:${uci}`] || "";
-            if (ply >= line.moves.length) { finish(`${san}: ${why}`); draw(); return; }
+            if (ply >= line.moves.length) { finish(`${withSpell(san)}: ${why}`); draw(); return; }
             const reply = opponentMoves();
             feedback.className = "trainer-feedback right";
-            feedback.innerHTML = `${san}: ${why} ${side ? "White" : "Black"} plays <strong>${reply}</strong>.`;
+            feedback.innerHTML = `${withSpell(san)}: ${why} ${side ? "White" : "Black"} plays <strong>${withSpell(reply)}</strong>.`;
             if (ply >= line.moves.length) finish(feedback.innerHTML);
             draw();
         }
@@ -389,6 +458,83 @@
         }
         controls.addEventListener("click", start);
         start();
+        showStats();
+    }
+    // ---- Diagrams ----
+    for (const fig of document.querySelectorAll(".diagram")) {
+        const list = (v) => (v ? v.trim().split(/\s+/) : []);
+        const board = parse(fig.dataset.fen || START);
+        const moves = list(fig.dataset.moves);
+        moves.forEach((m) => applyMove(board, m));
+        const holder = document.createElement("div");
+        fig.prepend(holder);
+        const render = makeBoard(holder, null, fig.hasAttribute("data-flip"));
+        const lastMove = moves[moves.length - 1];
+        render(board, {
+            last: fig.hasAttribute("data-no-last") || !lastMove ? null : [lastMove.slice(0, 2), lastMove.slice(2, 4)],
+            arrows: list(fig.dataset.arrows),
+            rings: list(fig.dataset.rings),
+        });
+    }
+
+    // ---- Square finder ----
+    for (const finder of document.querySelectorAll(".square-finder")) {
+        const storageKey = `${subject}:finder:${finder.dataset.finderId || "default"}`;
+        let flipped = false, target = null, streak = 0, best = (readJSON(storageKey) || {}).best || 0, missed = false;
+        const top = document.createElement("div");
+        top.className = "finder-top";
+        top.innerHTML = `<p class="finder-prompt" aria-live="polite"></p>
+            <button type="button" class="finder-flip" aria-pressed="false">View as Black</button>`;
+        finder.appendChild(top);
+        const holder = document.createElement("div");
+        finder.appendChild(holder);
+        const feedback = document.createElement("p");
+        feedback.className = "trainer-feedback";
+        const stats = document.createElement("p");
+        stats.className = "drill-stats";
+        finder.append(feedback, stats);
+        const prompt = top.querySelector(".finder-prompt");
+        const flipButton = top.querySelector(".finder-flip");
+        let render;
+
+        function build() {
+            holder.innerHTML = "";
+            render = makeBoard(holder, tap, flipped);
+            render({});
+        }
+        function next() {
+            let sq;
+            do { sq = FILES[Math.floor(Math.random() * 8)] + (1 + Math.floor(Math.random() * 8)); } while (sq === target);
+            target = sq; missed = false;
+            prompt.innerHTML = `Tap <strong>${target}</strong>`;
+        }
+        function showStats() { stats.textContent = `Streak: ${streak} · best: ${best}`; }
+        function tap(sq) {
+            if (sq === target) {
+                if (!missed) {
+                    streak += 1;
+                    if (streak > best) { best = streak; writeJSON(storageKey, { best }); }
+                }
+                feedback.className = "trainer-feedback right";
+                feedback.textContent = `Yes, ${sq}: column ${sq[0]}, row ${sq[1]}.`;
+                render({}, { last: [sq] });
+                next();
+            } else {
+                missed = true; streak = 0;
+                feedback.className = "trainer-feedback wrong";
+                feedback.textContent = `That's ${sq}. Find column ${target[0]} along the bottom edge and row ${target[1]} along the left edge. It's circled.`;
+                render({}, { rings: [target], hint: null });
+            }
+            showStats();
+        }
+        flipButton.addEventListener("click", () => {
+            flipped = !flipped;
+            flipButton.setAttribute("aria-pressed", String(flipped));
+            flipButton.textContent = flipped ? "View as White" : "View as Black";
+            build();
+        });
+        build();
+        next();
         showStats();
     }
 })();

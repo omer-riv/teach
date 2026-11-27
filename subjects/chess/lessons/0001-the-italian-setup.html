@@ -18,6 +18,30 @@
 <h2>Reading the moves</h2>
 <p>Every square has a name: a letter for the column (a–h, left to right from White's side) and a number for the row (1–8). The board below shows them along its edges. A move is written as the piece letter plus the square it lands on: <strong>N</strong> knight, <strong>B</strong> bishop, <strong>R</strong> rook, <strong>Q</strong> queen, <strong>K</strong> king. Pawns get no letter. <code>Nf3</code> means "knight to f3", <code>e4</code> means "pawn to e4", and <code>O-O</code> means castling on the king's side<sup><a href="#s4">4</a></sup>.</p>
 
+<figure class="diagram" data-rings="e4 f3">
+    <figcaption><strong>Finding a square:</strong> go along the bottom to the letter, then up to the number. The circles are <strong>e4</strong> (column e, row 4) and <strong>f3</strong> (column f, row 3).</figcaption>
+</figure>
+
+<div class="diagram-pair">
+    <figure class="diagram" data-arrows="e2e4" data-no-last>
+        <figcaption><strong>e4</strong>: no letter, so a pawn. It moves to e4.</figcaption>
+    </figure>
+    <figure class="diagram" data-moves="e2e4 e7e5" data-arrows="g1f3" data-no-last>
+        <figcaption><strong>Nf3</strong>: N is the knight. It jumps to f3.</figcaption>
+    </figure>
+</div>
+
+<div class="diagram-pair">
+    <figure class="diagram" data-moves="e2e4 e7e5 g1f3 b8c6 f1c4 f8c5" data-arrows="e1g1 h1f1" data-no-last>
+        <figcaption><strong>O-O</strong>, before: the king moves two squares towards the rook…</figcaption>
+    </figure>
+    <figure class="diagram" data-moves="e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 e1g1">
+        <figcaption>…and the rook jumps over to the other side of it.</figcaption>
+    </figure>
+</div>
+
+<p class="aside">Still finding squares slowly? The <a href="../reference/notation.html">notation page</a> has a quick tap-the-square drill. A minute a day makes it automatic.</p>
+
 <h2>The three jobs of an opening</h2>
 <ol>
     <li><strong>Take the centre.</strong> Pieces in the middle reach more squares.</li>
@@ -30,15 +54,15 @@
     <ol class="walk-notes">
         <li data-move="e2e4" data-san="1. e4">A pawn takes the centre, and the diagonals open for your bishop and queen. <em>Job 1.</em></li>
         <li data-move="e7e5" data-san="1… e5">Black takes the centre too. This is the most common reply.</li>
-        <li data-move="g1f3" data-san="2. Nf3">Your knight comes out towards the centre and attacks the e5 pawn. <em>Job 2.</em></li>
+        <li data-move="g1f3" data-san="2. Nf3" data-arrows="f3e5">Your knight comes out towards the centre and attacks the e5 pawn. <em>Job 2.</em></li>
         <li data-move="b8c6" data-san="2… Nc6">Black defends e5 with a knight.</li>
-        <li data-move="f1c4" data-san="3. Bc4">Your bishop aims at f7: the weak square next to Black's king, defended only by the king. This is the <strong>Italian Game</strong><sup><a href="#s1">1</a></sup>. <em>Job 2.</em></li>
+        <li data-move="f1c4" data-san="3. Bc4" data-arrows="c4f7" data-rings="f7">Your bishop aims at f7: the weak square next to Black's king, defended only by the king. This is the <strong>Italian Game</strong><sup><a href="#s1">1</a></sup>. <em>Job 2.</em></li>
         <li data-move="f8c5" data-san="3… Bc5">Black copies you. This is the usual reply, called the Giuoco Piano<sup><a href="#s1">1</a></sup>.</li>
         <li data-move="c2c3" data-san="4. c3">A quiet pawn move. It prepares d4 later, and gives your bishop a hiding square on c2 if it's ever chased.</li>
-        <li data-move="g8f6" data-san="4… Nf6">Black's knight now <strong>attacks your e4 pawn</strong>. A knight jumps from f6 straight to e4.</li>
-        <li data-move="d2d3" data-san="5. d3">Defend it. Now if the knight takes on e4, your pawn takes back.</li>
+        <li data-move="g8f6" data-san="4… Nf6" data-arrows="f6e4" data-rings="e4">Black's knight now <strong>attacks your e4 pawn</strong>. A knight jumps from f6 straight to e4.</li>
+        <li data-move="d2d3" data-san="5. d3" data-arrows="d3e4">Defend it. Now if the knight takes on e4, your pawn takes back.</li>
         <li data-move="d7d6" data-san="5… d6">Black defends e5 the same way.</li>
-        <li data-move="e1g1" data-san="6. O-O">Castle: the king goes two squares right and the rook jumps over it. King safe, rook in the game. <em>Job 3.</em></li>
+        <li data-move="e1g1" data-san="6. O-O" data-arrows="h1f1">Castle: the king goes two squares right and the rook jumps over it. King safe, rook in the game. <em>Job 3.</em></li>
         <li data-move="e8g8" data-san="6… O-O">Black castles too. Both sides are ready for the middle game. That's the whole setup.</li>
     </ol>
 </div>
@@ -48,6 +72,9 @@
 <h2>The one rule about order</h2>
 <p>The first three moves always go <code>e4</code>, <code>Nf3</code>, <code>Bc4</code>. After that, <code>c3</code>, <code>d3</code> and <code>O-O</code> can come in any order, with one exception:</p>
 <p class="formula">Black knight on f6? Play d3 first.</p>
+<figure class="diagram" data-moves="e2e4 e7e5 g1f3 b8c6 f1c4 g8f6" data-arrows="f6e4 d2d3" data-rings="e4">
+    <figcaption>After <strong>3… Nf6</strong> the knight attacks e4 (circled). <strong>d3</strong> defends it.</figcaption>
+</figure>
 <p>The knight on f6 attacks your e4 pawn. If Black plays it on move 3 (that's the Two Knights Defence<sup><a href="#s2">2</a></sup>), defend at once with d3 and carry on.</p>
 
 <h2>Practice: play it from memory</h2>
@@ -68,11 +95,13 @@
 <div class="quiz widget" data-quiz-id="0001">
     <fieldset class="q" data-answer="2">
         <legend>1. What does Bc4 aim at?</legend>
+        <figure class="diagram" data-moves="e2e4 e7e5 g1f3 b8c6 f1c4"></figure>
         <div class="options"><button>The e5 pawn</button><button>Black's queen</button><button>The f7 square</button><button>The h7 square</button></div>
         <p class="why" hidden>f7 sits next to Black's king and only the king defends it, so the bishop puts early pressure there.</p>
     </fieldset>
     <fieldset class="q" data-answer="0">
         <legend>2. After 1. e4 e5 2. Nf3 Nc6 3. Bc4, Black plays Nf6. Your move?</legend>
+        <figure class="diagram" data-moves="e2e4 e7e5 g1f3 b8c6 f1c4 g8f6"></figure>
         <div class="options"><button>d3</button><button>c3</button><button>O-O</button><button>Qe2</button></div>
         <p class="why" hidden>The knight on f6 attacks e4, so defend it with d3 first. Then c3 and castling.</p>
     </fieldset>
@@ -97,7 +126,7 @@
 <div class="next">
     <p><strong>Your win:</strong> you can play the Italian setup as White from memory, and you know the one thing that changes the order.</p>
     <p><strong>Try it for real:</strong> play your next three games as White with this setup, against friends or a bot on your app. Don't worry about what comes after move 6 yet.</p>
-    <p><strong>Keep handy:</strong> <a href="../reference/italian-setup.html">The setup on one page</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../index.html">Course home</a></p>
+    <p><strong>Keep handy:</strong> <a href="../reference/italian-setup.html">The setup on one page</a> · <a href="../reference/notation.html">Notation</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../index.html">Course home</a></p>
     <p><strong>Read next (primary source):</strong> Chess.com's <a href="https://www.chess.com/openings/Italian-Game">Italian Game page</a>. It shows the main replies and the ideas behind them.</p>
     <p><strong>Questions?</strong> Ask your teacher (Claude): "what if Black doesn't play e5?", "what if my friend attacks with the queen early?". Tell me how the drill and your games went, too.</p>
 </div>
