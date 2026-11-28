@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 · Punish the early queen</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-subject="chess">
+<main>
+
+<p class="eyebrow"><a href="../index.html">Chess Openings</a> · Lesson 3 · ~10 min</p>
+<h1>Punish the early queen</h1>
+<p class="lede">You've stopped Scholar's mate. Now make your friend pay for trying it: one knight jump that often wins a rook.</p>
+
+<p class="mission"><strong>Why this now.</strong> Lesson 2 got you to a safe position. But a friend who tries Scholar's mate usually keeps going with the queen. Every time you attack it, you get a free move. This lesson turns their favourite attack into a way for you to win.</p>
+
+<h2>Warm-up: from last time</h2>
+<div class="quiz widget" data-quiz-id="0003-warmup">
+    <fieldset class="q" data-answer="3">
+        <legend>1. e4 e5 2. Bc4 Nc6 3. Qh5. Your move?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5"></figure>
+        <div class="options"><button>Nf6</button><button>Bc5</button><button>d6</button><button>g6</button></div>
+        <p class="why" hidden>g6 blocks the queen and attacks it. The other three allow Qxf7#.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>Then 4. Qf3, aiming at f7 again. Your move?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3"></figure>
+        <div class="options"><button>Nf6</button><button>Bg7</button><button>Bc5</button><button>d6</button></div>
+        <p class="why" hidden>Nf6 blocks the f-file and develops. That's the position this lesson starts from.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>You're White in the Italian. Which move comes first?</legend>
+        <div class="options"><button>Bc4</button><button>e4</button><button>Nf3</button><button>d3</button></div>
+        <p class="why" hidden>e4, then Nf3, then Bc4. Keep it fresh: you'll need it as White.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<h2>A queen out early is a target</h2>
+<p>The queen is your most valuable piece, so when it's attacked it <em>must</em> move. If you attack it with a move you wanted to make anyway, such as developing a piece, you've gained a <strong>tempo</strong>: a move's worth of time. Your friend spends their move rescuing the queen while you keep developing. That's why the Scholar's mate attack is risky for White<sup><a href="#s1">1</a></sup>.</p>
+
+<h2>The knight jump: …Nd4</h2>
+<p>After you've defended (g6, then Nf6), the queen is on f3. Friends often move it to b3, to aim at f7 once more. Here's the key move:</p>
+<figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4" data-arrows="d4b3 d4c2" data-rings="c2">
+    <figcaption><strong>5… Nd4!</strong> The knight attacks the queen on b3 <em>and</em> the pawn on c2. The engine rates Black about 4 pawns better here<sup><a href="#s3">3</a></sup>.</figcaption>
+</figure>
+<p>Why c2 matters: from c2 a knight would attack White's king on e1 and the rook on a1 at the same time. White has to save the queen <em>and</em> guard c2 with one move. A Lichess forum analysis recommends exactly this plan<sup><a href="#s2">2</a></sup>, and the same ...Nd4 works against a queen on f3.</p>
+
+<h2>Watch it win a rook</h2>
+<div class="walk widget" data-flip data-intro="Your friend tries Scholar's mate, then keeps going. Tap Next.">
+    <ol class="walk-notes">
+        <li data-move="e2e4" data-san="1. e4">The usual start.</li>
+        <li data-move="e7e5" data-san="1… e5">You take the centre.</li>
+        <li data-move="f1c4" data-san="2. Bc4" data-arrows="c4f7">The bishop aims at f7.</li>
+        <li data-move="b8c6" data-san="2… Nc6">Develop.</li>
+        <li data-move="d1h5" data-san="3. Qh5" data-arrows="h5f7 c4f7" data-rings="f7">Scholar's mate threat.</li>
+        <li data-move="g7g6" data-san="3… g6" data-arrows="g6h5">Block and attack the queen. Lesson 2.</li>
+        <li data-move="h5f3" data-san="4. Qf3" data-arrows="f3f7">Threatens mate again.</li>
+        <li data-move="g8f6" data-san="4… Nf6">Block. You've developed two knights; White has moved the queen three times.</li>
+        <li data-move="f3b3" data-san="5. Qb3" data-arrows="b3f7">The queen goes round to aim at f7 once more (behind the bishop).</li>
+        <li data-move="c6d4" data-san="5… Nd4!" data-arrows="d4b3 d4c2" data-rings="c2">The jump. It attacks the queen and eyes c2.</li>
+        <li data-move="b3g3" data-san="6. Qg3??" data-arrows="g3e5">The queen escapes and eyes your e5 pawn, but nothing guards c2 any more.</li>
+        <li data-move="d4c2" data-san="6… Nxc2+" data-arrows="c2e1 c2a1" data-rings="e1 a1">Check, and the rook on a1 is attacked too: a <strong>fork</strong>.</li>
+        <li data-move="e1d1" data-san="7. Kd1">The king must move. (Kf1 or Ke2 changes nothing.)</li>
+        <li data-move="c2a1" data-san="7… Nxa1">You've won a rook. That's usually enough to win a casual game.</li>
+    </ol>
+</div>
+
+<h2>If they check on f7: don't panic</h2>
+<p>Instead of moving the queen, White might grab a pawn with check: <code>6. Bxf7+</code>. Your only move is <strong>Ke7</strong>. That looks scary, but your knight still attacks the queen. Once the queen moves away (say <code>7. Qd3</code>), nothing protects the bishop, and your king takes it: <strong>7… Kxf7</strong>. You've won a bishop for a pawn<sup><a href="#s3">3</a></sup>.</p>
+<figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4 c4f7 e8e7 b3d3" data-arrows="e7f7" data-rings="f7">
+    <figcaption>After <strong>6. Bxf7+ Ke7 7. Qd3</strong>: the bishop on f7 has no defender left. <strong>Kxf7</strong>.</figcaption>
+</figure>
+
+<h2>When the trick isn't there</h2>
+<p>A careful friend plays <code>5. Ne2</code>. That knight guards d4, so ...Nd4 just gets swapped off, and the engine says it would hand White the better game<sup><a href="#s3">3</a></sup>. Before jumping, check: <strong>can White simply take the knight on d4?</strong> If so, don't. Develop instead: <strong>Bg7</strong>, then castle. You're already fine, because White's queen has wasted moves.</p>
+<figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 g1e2" data-arrows="e2d4" data-rings="d4">
+    <figcaption><strong>5. Ne2</strong> guards d4 (circled). No jump here: play Bg7 and castle.</figcaption>
+</figure>
+<p class="formula">Queen on f3 or b3, and d4 unguarded? Jump: …Nd4.</p>
+
+<h2>Practice: as Black</h2>
+<p>Your friend tries five different follow-ups. Start with the defence from lesson 2, then punish them. Some games start with <code>2. Qh5</code> instead: you know what to do there (Nc6 first).</p>
+
+<div class="line-drill widget" data-drill-id="0003" data-side="black">
+    <ul class="drill-lines" hidden>
+        <li data-name="The greedy queen" data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4 b3g3 d4c2 e1d1 c2a1" data-san="e4 e5 Bc4 Nc6 Qh5 g6 Qf3 Nf6 Qb3 Nd4 Qg3 Nxc2+ Kd1 Nxa1">
+            <span data-on="e7e5" data-kind="why">centre.</span>
+            <span data-on="b8c6" data-kind="why">develop.</span>
+            <span data-on="g7g6" data-kind="why">block and attack the queen.</span>
+            <span data-on="g8f6" data-kind="why">block the f-file.</span>
+            <span data-on="c6d4" data-kind="why">attacks the queen and eyes c2.</span>
+            <span data-on="d4c2" data-kind="why">check, and the rook on a1 is attacked too.</span>
+            <span data-on="c2a1" data-kind="why">a whole rook won.</span>
+            <span data-on="g8f6@4" data-kind="ok">A fine move, but for this drill play Nc6.</span>
+            <span data-on="g8f6@6" data-kind="trap">Then Qxf7 is checkmate. Block the queen first.</span>
+            <span data-on="f8g7@10" data-kind="ok">A sensible move, but there's something stronger. Which knight can attack the queen?</span>
+            <span data-on="f6e4@12" data-kind="ok">That attacks the queen, but there's a bigger prize. Look at c2.</span>
+        </li>
+        <li data-name="Queen to c3" data-moves="e2e4 e7e5 d1h5 b8c6 f1c4 g7g6 h5f3 g8f6 f3b3 c6d4 b3c3 f6e4/d7d5" data-san="e4 e5 Qh5 Nc6 Bc4 g6 Qf3 Nf6 Qb3 Nd4 Qc3 Nxe4/d5">
+            <span data-on="e7e5" data-kind="why">centre.</span>
+            <span data-on="b8c6" data-kind="why">defends e5 against the early queen.</span>
+            <span data-on="g7g6" data-kind="why">now f7 is the target: block and attack.</span>
+            <span data-on="g8f6" data-kind="why">block the f-file.</span>
+            <span data-on="c6d4" data-kind="why">attacks the queen and eyes c2.</span>
+            <span data-on="f6e4" data-kind="why">wins the e4 pawn and attacks the queen again. (The engine's top choice.)</span>
+            <span data-on="d7d5" data-kind="why">attacks the bishop and opens lines. Also very strong.</span>
+            <span data-on="g7g6@4" data-kind="trap">Not yet: Qxe5+ forks your king and rook. Defend e5 first.</span>
+            <span data-on="g8f6@4" data-kind="trap">Then Qxe5+ wins your e5 pawn with check. Defend e5 first.</span>
+            <span data-on="g8f6@6" data-kind="trap">Then Qxf7 is checkmate. Block the queen first.</span>
+            <span data-on="d7d6@4" data-kind="ok">That defends e5 too, but this lesson needs your knight on c6. Try Nc6.</span>
+            <span data-on="d4c2@12" data-kind="trap">The queen on c3 guards c2 now, so it just takes your knight. Look for another target.</span>
+        </li>
+        <li data-name="Check on f7" data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4 c4f7 e8e7 b3d3 e7f7" data-san="e4 e5 Bc4 Nc6 Qh5 g6 Qf3 Nf6 Qb3 Nd4 Bxf7+ Ke7 Qd3 Kxf7">
+            <span data-on="e7e5" data-kind="why">centre.</span>
+            <span data-on="b8c6" data-kind="why">develop.</span>
+            <span data-on="g7g6" data-kind="why">block and attack the queen.</span>
+            <span data-on="g8f6" data-kind="why">block the f-file.</span>
+            <span data-on="c6d4" data-kind="why">attacks the queen and eyes c2.</span>
+            <span data-on="g8f6@4" data-kind="ok">A fine move, but for this drill play Nc6.</span>
+            <span data-on="g8f6@6" data-kind="trap">Then Qxf7 is checkmate. Block the queen first.</span>
+            <span data-on="e8e7" data-kind="why">the only move, and it's fine: your knight still attacks the queen.</span>
+            <span data-on="e7f7" data-kind="why">nothing guards the bishop any more. You've won a piece for a pawn.</span>
+            <span data-on="f8g7@10" data-kind="ok">Sensible, but there's something stronger. Which knight can attack the queen?</span>
+            <span data-on="d7d5@14" data-kind="ok">Strong too, but the simplest is to take the free bishop. What's attacking f7?</span>
+        </li>
+        <li data-name="Pawn storm" data-moves="e2e4 e7e5 d1h5 b8c6 f1c4 g7g6 h5f3 g8f6 g2g4 c6d4 f3d1 d7d5/f6g4/f6e4" data-san="e4 e5 Qh5 Nc6 Bc4 g6 Qf3 Nf6 g4 Nd4 Qd1 d5/Nxg4/Nxe4">
+            <span data-on="e7e5" data-kind="why">centre.</span>
+            <span data-on="b8c6" data-kind="why">defends e5 against the early queen.</span>
+            <span data-on="g7g6" data-kind="why">block and attack the queen.</span>
+            <span data-on="g8f6" data-kind="why">block the f-file.</span>
+            <span data-on="c6d4" data-kind="why">the queen on f3 is still a target. It attacks it and eyes c2.</span>
+            <span data-on="d7d5" data-kind="why">opens lines and attacks the bishop. The engine's top choice.</span>
+            <span data-on="f6g4" data-kind="why">takes the pawn White pushed. Good.</span>
+            <span data-on="f6e4" data-kind="why">takes a centre pawn. Good.</span>
+            <span data-on="g7g6@4" data-kind="trap">Not yet: Qxe5+ forks your king and rook. Defend e5 first.</span>
+            <span data-on="g8f6@4" data-kind="trap">Then Qxe5+ wins your e5 pawn with check. Defend e5 first.</span>
+            <span data-on="g8f6@6" data-kind="trap">Then Qxf7 is checkmate. Block the queen first.</span>
+            <span data-on="d7d6@4" data-kind="ok">That defends e5 too, but this lesson needs your knight on c6. Try Nc6.</span>
+            <span data-on="d4c2@12" data-kind="trap">The queen on d1 guards c2 now. Look for a pawn to win or a piece to attack.</span>
+        </li>
+        <li data-name="The careful friend" data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 g1e2 f8g7 b1c3 e8g8/d7d6" data-san="e4 e5 Bc4 Nc6 Qh5 g6 Qf3 Nf6 Ne2 Bg7 Nc3 O-O/d6">
+            <span data-on="e7e5" data-kind="why">centre.</span>
+            <span data-on="b8c6" data-kind="why">develop.</span>
+            <span data-on="g7g6" data-kind="why">block and attack the queen.</span>
+            <span data-on="g8f6" data-kind="why">block the f-file.</span>
+            <span data-on="f8g7" data-kind="why">the knight on e2 guards d4, so no jump. Just develop.</span>
+            <span data-on="e8g8" data-kind="why">king safe. You're comfortable.</span>
+            <span data-on="d7d6" data-kind="why">solid. Castle next.</span>
+            <span data-on="g8f6@4" data-kind="ok">A fine move, but for this drill play Nc6.</span>
+            <span data-on="g8f6@6" data-kind="trap">Then Qxf7 is checkmate. Block the queen first.</span>
+            <span data-on="c6d4@10" data-kind="trap">Not here: the knight on e2 guards d4, so Nxd4 just swaps it off. When the trick isn't there, develop.</span>
+            <span data-on="d7d6@10" data-kind="ok">Good move! But get the bishop out first here, so you can castle next. Try Bg7.</span>
+        </li>
+    </ul>
+</div>
+
+<p>Play until you've seen all five and won each without a slip.</p>
+
+<h2>Check yourself</h2>
+<div class="quiz widget" data-quiz-id="0003">
+    <fieldset class="q" data-answer="2">
+        <legend>1. White's queen goes to b3. Your best move?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3"></figure>
+        <div class="options"><button>Bg7</button><button>d6</button><button>Nd4</button><button>Nxe4</button></div>
+        <p class="why" hidden>Nd4 attacks the queen and eyes c2: the engine's clear top move.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>2. Why is …Nd4 so strong there?</legend>
+        <div class="options"><button>It hits queen, c2</button><button>It defends f7 pawn</button><button>It prepares quick castling</button><button>It blocks the bishop</button></div>
+        <p class="why" hidden>It attacks the queen, and threatens Nxc2+ forking king and rook. One White move can't easily fix both.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="3">
+        <legend>3. White played Qg3. Your move?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4 b3g3"></figure>
+        <div class="options"><button>Bg7</button><button>d5</button><button>Nxe4</button><button>Nxc2+</button></div>
+        <p class="why" hidden>Nxc2+ forks the king on e1 and the rook on a1. Next move you take the rook.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="1">
+        <legend>4. White played Ne2. Should you jump to d4?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 g1e2"></figure>
+        <div class="options"><button>Yes, it wins material</button><button>No, Ne2 guards d4</button><button>Yes, it forks c2</button><button>No, it blocks d-pawn</button></div>
+        <p class="why" hidden>The knight on e2 can just take on d4. No trick: develop with Bg7 and castle.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="0">
+        <legend>5. After 6. Bxf7+ Ke7 7. Qd3, your move?</legend>
+        <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4 c4f7 e8e7 b3d3"></figure>
+        <div class="options"><button>Kxf7</button><button>Bg7</button><button>Bh6</button><button>a5</button></div>
+        <p class="why" hidden>Nothing guards the bishop any more, so your king takes it. You're a piece up.</p>
+    </fieldset>
+    <fieldset class="q" data-answer="2">
+        <legend>6. What is a tempo?</legend>
+        <div class="options"><button>A fast time control</button><button>A pawn in the centre</button><button>A move's worth of time</button><button>A check that wins material</button></div>
+        <p class="why" hidden>Attacking the queen with a developing move gains a tempo: your friend spends a move saving it.</p>
+    </fieldset>
+    <p class="score" aria-live="polite"></p>
+</div>
+
+<div class="next">
+    <p><strong>Your win:</strong> you can defend Scholar's mate and then punish it, using …Nd4 to win material, and you know when the trick isn't there.</p>
+    <p><strong>Try it for real:</strong> next time a friend brings the queen out early, defend, then look for a move that attacks it. And you still owe those three games as White with the Italian.</p>
+    <p><strong>Keep handy:</strong> <a href="../reference/early-attacks.html">Early attacks</a> · <a href="../reference/notation.html">Notation</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../index.html">Course home</a></p>
+    <p><strong>Practise forks (primary source):</strong> Lichess <a href="https://lichess.org/training/themes">puzzle themes</a>: pick <strong>Fork</strong>. Real positions where one piece attacks two things, the same trick as Nxc2+. Free; five a day is plenty.</p>
+    <p><strong>Questions?</strong> Ask your teacher (Claude): "what if the queen goes somewhere else?", "how do I find forks in my games?". And tell me how this one went.</p>
+</div>
+
+<hr>
+<h2>Sources</h2>
+<ol class="sources">
+    <li id="s1">Chess.com, <a href="https://www.chess.com/terms/scholars-mate-chess">"Scholar's Mate"</a>. Why the early-queen attack is risky: Black can gain a lead in development.</li>
+    <li id="s2">Lichess forum, <a href="https://lichess.org/forum/game-analysis/scholars-mate">"Scholar's mate"</a> (game analysis). The plan of ...Nd4 hitting the queen and c2 after 4. Qf3 Nf6.</li>
+    <li id="s3">Stockfish engine analysis (run for this lesson, depth 18–22). After 5. Qb3 Nd4 Black is about 3.7 pawns better; 5. g4 Nd4 about 3.5; 5. Ne2 Nd4? favours White by about 0.9. Each line and quiz answer was checked.</li>
+    <li id="s4">Wikipedia, <a href="https://en.wikipedia.org/wiki/Scholar%27s_mate">"Scholar's mate"</a>. 2. Qh5 Nc6 3. Bc4 g6 4. Qf3 Nf6 reaches the same position.</li>
+</ol>
+
+</main>
+<script src="../assets/quiz.js"></script>
+<script src="../assets/board.js"></script>
+</body>
+</html>

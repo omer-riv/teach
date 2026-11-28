@@ -10,7 +10,7 @@
 <main>
 <p class="eyebrow"><a href="../index.html">Chess Openings</a> · Reference</p>
 <h1>Early attacks</h1>
-<p class="lede">Stopping Scholar's mate as Black.</p>
+<p class="lede">Stopping Scholar's mate as Black, then punishing it.</p>
 
 <p class="formula">Queen hits f7: block it, and attack the queen if you can.</p>
 <p>f7 (f2 for White) is weak at the start because only the king defends it.</p>
@@ -32,6 +32,21 @@
     </figure>
 </div>
 
+<h2>Then punish it</h2>
+<p class="formula">Queen on f3 or b3, and d4 unguarded? Jump: …Nd4.</p>
+<div class="diagram-pair">
+    <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4" data-arrows="d4b3 d4c2" data-rings="c2">
+        <figcaption><strong>5… Nd4</strong> hits the queen and eyes c2.</figcaption>
+    </figure>
+    <figure class="diagram" data-flip data-moves="e2e4 e7e5 f1c4 b8c6 d1h5 g7g6 h5f3 g8f6 f3b3 c6d4 b3g3 d4c2" data-arrows="c2e1 c2a1" data-rings="e1 a1">
+        <figcaption>If c2 is left unguarded: <strong>Nxc2+</strong> forks king and rook.</figcaption>
+    </figure>
+</div>
+<ul>
+    <li><span class="mono">Bxf7+</span>? Play <span class="mono">Ke7</span>; once the queen moves away, <span class="mono">Kxf7</span>.</li>
+    <li><span class="mono">5. Ne2</span> guards d4: no jump. Develop with Bg7 and castle.</li>
+</ul>
+
 <h2>The mistakes</h2>
 <ul>
     <li><span class="mono">3… Nf6??</span> after Qh5 (with Bc4): <span class="mono">Qxf7#</span>. Attacking the queen doesn't stop mate.</li>
@@ -42,7 +57,7 @@
 <h2>Symbols</h2>
 <p><code>+</code> check · <code>#</code> checkmate · <code>??</code> blunder</p>
 
-<p class="aside">Learned in <a href="../lessons/0002-dont-get-mated-early.html">lesson 2</a>. Terms: <a href="glossary.html">glossary</a>.</p>
+<p class="aside">Learned in <a href="../lessons/0002-dont-get-mated-early.html">lesson 2</a> and <a href="../lessons/0003-punish-the-early-queen.html">lesson 3</a>. Terms: <a href="glossary.html">glossary</a>.</p>
 </main>
 <script src="../assets/board.js"></script>
 </body>
