@@ -32,6 +32,7 @@
 //         <span data-on="g7g6" data-kind="why">Shown after this right move.</span>
 //         <span data-on="g8f6" data-kind="trap">Shown when the learner tries this wrong move.</span>
 //         <span data-on="g7g6@4" data-kind="trap">Only when tried as ply 4 (1-based half-move).</span>
+//         <span data-on="d7d6" data-kind="ok">A good move, but not this drill's: shown, not counted.</span>
 //       </li>
 //     </ul>
 //   </div>
@@ -425,6 +426,15 @@
         function attempt(uci) {
             const options = line.moves[ply];
             const index = options.indexOf(uci);
+            const okNote = line.notes[`ok:${uci}@${ply + 1}`] || line.notes[`ok:${uci}`];
+            if (index < 0 && okNote) {
+                // A fine move, just not the one this drill practises: no penalty.
+                feedback.className = "trainer-feedback";
+                feedback.innerHTML = okNote;
+                selected = null;
+                draw();
+                return;
+            }
             if (index < 0) {
                 misses += 1; mistakes += 1;
                 let msg = line.notes[`trap:${uci}@${ply + 1}`] || line.notes[`trap:${uci}`]
